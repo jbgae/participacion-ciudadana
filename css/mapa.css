@@ -1,0 +1,33 @@
+/* 
+    Created on : 02-ene-2015, 3:49:43
+    Author     : jbgae_000
+*/
+
+html{
+    margin:0px;
+    padding:0px;
+}
+
+#map-canvas{    
+    height:300px;
+    margin-bottom:1%;
+    width:100%;
+    padding:0;
+    position:absolute !important;
+    top:0px !important;
+    right:0px;
+    bottom:0px;
+    left:0px !important;
+}
+
+#incidenteForm{
+    margin-top: 320px;
+}
+
+#foto{
+    margin-top:300px;
+}
+
+
+
+
