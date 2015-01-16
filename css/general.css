@@ -48,3 +48,13 @@ div#main.panel.y-scroll>ul.list>li>a>p.ui-li-aside{
     margin-right: 25px;
     margin-top:-80px;
 }
+
+div#main.panel.y-scroll>form#incidenteForm.form>label{
+    float:left;
+    margin-left: 25px;
+    margin-bottom: 5px;
+}
+
+div#main.panel.y-scroll>form#incidenteForm.form>label{
+    width:100%;
+}

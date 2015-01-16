@@ -1,14 +1,14 @@
-/*$(function(){
-   // $("#direccion").hide();
-    $("#chck-position").change(function(){
-        if(this.checked){
-            $("#mapa").fadeIn('slow');
-            $("#direccion").fadeOut('slow');
+$(document).ready(function(){
+    $("#direccion").hide();
+    $("#chck-position").change(function(){ 
+        if($(this).is(':checked')) {
+            $("#map-canvas").show();
+            $("#direccion").hide();
         }
         else{
-            $("#mapa").fadeOut('slow');
-            $("#direccion").fadeIn('slow');
+            $("#map-canvas").hide();
+            $("#direccion").show();
         } 
    });
-});*/
+});
 

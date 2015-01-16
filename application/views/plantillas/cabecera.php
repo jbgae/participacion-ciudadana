@@ -18,16 +18,31 @@
         
         
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-        <script src="<?= base_url();?>js/mapa.js" type="text/javascript"></script>    
-        <script src="<?= base_url();?>js/camara.js" type="text/javascript"></script>    
-        <script src="<?= base_url();?>js/incidente.js" type="text/javascript"></script>    
-        <script src="<?= base_url();?>js/posicion.js" type="text/javascript"></script>    
+
+        <?php if(isset($javascript)):?>
+            <?php if(!is_array($javascript) && ($javascript != "")):?>
+                <script src="<?= base_url();?>js/<?= $javascript;?>.js" type="text/javascript"></script>
+            <?php else:?>
+                <?php foreach($javascript as $js):?>
+                    <script src="<?= base_url();?>js/<?= $js;?>.js" type="text/javascript"></script>
+                <?php endforeach;?>
+            <?php endif;?>        
+        <?php endif;?>
 
 
         <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/afui.custom.css">
         <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/general.css">
         <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/mapa.css">
         <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/incidente.css">
+        <?php if(isset($estilo)):?>
+            <?php if(!is_array($estilo) && ($estilo != "")):?>
+                <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/<?= $estilo;?>.css">
+            <?php else:?>
+                <?php foreach($estilo as $css):?>
+                    <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/<?= $css;?>.css">
+                <?php endforeach;?>
+            <?php endif;?>        
+        <?php endif;?>
         
         
         

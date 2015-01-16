@@ -16,6 +16,7 @@ class Incidente extends MY_Controller{
     public function registrar(){
         $this->permisos('ciudadano');
         $this->pagina = "incidente";
+        $this->javascript = array("mapa","camara","incidente");
         $this->carpeta = "ciudadano";
         
         $this->mostrar();
@@ -24,8 +25,6 @@ class Incidente extends MY_Controller{
     public function historial(){
         $this->permisos('ciudadano');
         $this->pagina = "historial";
-        $this->estilo = "";
-        $this->javascript = "";
         $this->carpeta = "ciudadano";
         
         $datos['incidentes'] = array();
@@ -50,7 +49,7 @@ class Incidente extends MY_Controller{
     
     
     public function verIncidente($id){ 
-        //$this->permisos('ciudadano');
+        $this->permisos('ciudadano');
         $this->pagina = "ver_incidente";
         $this->estilo = "incidente";
         $this->javascript = "";
@@ -75,14 +74,5 @@ class Incidente extends MY_Controller{
         $this->mostrar($datos);
         
     }
-    
-    /*public function mapa(){
-        $this->pagina = "mapa";
-        $this->estilo = "mapa";
-        $this->javascript = "mapa";
-        $this->carpeta = "ciudadano";
-        
-        $this->mostrar();
-    }*/
 }
 

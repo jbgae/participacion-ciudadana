@@ -191,18 +191,9 @@ class Usuario extends MY_Controller{
         redirect('login');
     }
     
-    public function inicio(){
-        $this->permisos('ciudadano');
-        $this->pagina = "inicio";
-        $this->carpeta = "comun";
-        
-        $this->mostrar();
-    }
-    
+   
     public function bloqueada(){
         $this->pagina = "bloqueada";
-        $this->estilo = "";
-        $this->javascript = "";
         $this->carpeta = "comun";
         
         $this->mostrar();

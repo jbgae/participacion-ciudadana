@@ -40,14 +40,15 @@
 
 
 $route['validar/(:any)'] = "usuario/validar/$1";
-$route['ver/incidente/(:any)'] = "incidente/verIncidente/$1";
 $route['historial'] = "incidente/historial";
-$route['ciudadano'] = "usuario/inicio";
-$route['administrador'] = "usuario/inicio";
 $route['incidente'] = "incidente/registrar";
 $route['restablecer'] = "usuario/password";
 $route['login'] = "usuario/login";
 $route['registrar'] = "usuario/registrar";
+
+$route['ciudadano'] = "incidente/registrar";
+$route['administrador'] = "incidente/registrar";
+$route['ver/incidente/(:any)'] = "incidente/verIncidente/$1";
 $route['cerrar'] = "usuario/cerrar";
 $route['default_controller'] = "usuario/login";
 $route['404_override'] = '';
