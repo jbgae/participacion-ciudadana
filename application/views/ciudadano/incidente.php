@@ -1,5 +1,6 @@
 
-<div id="map-canvas"></div><br>
+
+ <div id="geolocation_map"></div><br>
 <div class="formGroupHead"></div>
 <?= form_open_multipart('',array('class'=>'form', 'id'=>'incidenteForm'));?>
 
@@ -16,15 +17,17 @@
 
     <h3>Imagen</h3>
     <br>
-    <input id="radio_1" name="radio_test" value="1" type="radio"><label for="radio_1">Tomar foto</label>
+    <input id="radio_1" name="radio_test" value="1" type="radio" checked="true"><label for="radio_1">Tomar foto</label>
     <input id="radio_2" name="radio_test" value="2" type="radio"><label for="radio_2">Subir foto</label>
-    <div id="Camara">
+    <div id="camara">
         <a class="button icon camera"> Tomar foto</a>
     </div>
 
     <br>
-    <input type="file" name="fileToUpload" id="fileToUpload" onchange="fileSelected();" accept="image/*" capture="camera">            
-    <input type="button" onclick="uploadFile()" value="Subir imagen" class="button" />
+    <div id="examinar">
+        <input type="file" name="fileToUpload" id="fileToUpload" onchange="fileSelected();" accept="image/*" capture="camera" ><br>            
+        <input type="button" onclick="uploadFile()" value="Subir imagen" class="button" />
+    </div>
     <br>
 
 
@@ -34,6 +37,11 @@
     </div>
 
     <div id="progress"></div>
+    
+    
+          
+         
+    
 
 <?= form_close();?>
  

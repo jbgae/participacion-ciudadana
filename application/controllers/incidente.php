@@ -16,7 +16,7 @@ class Incidente extends MY_Controller{
     public function registrar(){
         $this->permisos('ciudadano');
         $this->pagina = "incidente";
-        $this->javascript = array("mapa","camara","incidente");
+        $this->javascript = array("camara","incidente", "gmaps","mapa");
         $this->carpeta = "ciudadano";
         
         $this->mostrar();
@@ -36,16 +36,77 @@ class Incidente extends MY_Controller{
         }
         $usuario = new Usuario_model;
         $incidenteAux1 = new Incidente_model;
+        
+        
         if(!empty($incidenteAux)){
             foreach($incidenteAux as $incidente){
                 $incidente->usuario = $usuario->nombre($incidente->emailUsuario).' '. $usuario->apellido1($incidente->emailUsuario). ' '.$usuario->apellido2($incidente->emailUsuario);
                 $incidente->estado = $incidenteAux1->estado($incidente->IdEstado);
-                $datos['incidentes'][$incidente->fechaAlta] = $incidente;
+                
+                $key =  date("d-m-Y", strtotime($incidente->fechaAlta));
+                if(!isset($datos['incidentes'][$key])){
+                    $datos['incidentes'][$key] = array();
+                }
+                $incidenteAux = array(
+                    'Id'            => $incidente->Id,
+                    'rutaImagen'    => $incidente->rutaImagen,
+                    'usuario'       => $incidente->usuario,
+                    'descripcion'   => $incidente->descripcion,
+                    'estado'        => $incidente->estado
+                );
+                
+                
+                array_push($datos['incidentes'][$key], $incidente);
+                
             }
         }
-         
+        
+        
         $this->mostrar($datos);
     }
+    
+    public function mapa(){
+        
+        $this->permisos('ciudadano');
+        $this->pagina = "mapa";
+        $this->carpeta = "ciudadano";
+        $this->javascript = array("gmaps","mapa_incidentes", "mapa_incidentes");
+        $this->estilo = array("mapa");
+       
+        $this->mostrar();
+    }
+    
+    
+    public function cargar(){
+        if(!$this->input->is_ajax_request()){
+            redirect('404');
+        }
+        else{
+            $incidentes = array();
+            if($this->session->userdata('usuario') == "ciudadano"){
+                $incidenteAux = Incidente_model::incidentes($this->session->userdata('email'));           
+            }
+            elseif($this->session->userdata('usuario') == "administrador"){
+                $incidenteAux = Incidente_model::incidentes();
+            }
+            
+            if(!empty($incidenteAux)){
+                $i = 0;
+                foreach($incidenteAux as $inc){
+                    $incidentes[$i] = array(
+                        'title'=>$inc->fechaAlta,
+                        'lat' =>$inc->latitud,
+                        'lng' =>$inc->longitud,
+                        
+                    );
+                    $i++;
+                }
+                
+            }
+            echo json_encode($incidentes);
+        }
+    }
+    
     
     
     public function verIncidente($id){ 

@@ -8,7 +8,7 @@ html{
     padding:0px;
 }
 
-#map-canvas{    
+#geolocation_map{    
     height:300px;
     margin-bottom:1%;
     width:100%;
@@ -19,6 +19,20 @@ html{
     bottom:0px;
     left:0px !important;
 }
+
+#mapa_incidentes{
+    height:100%;
+    margin-bottom:1%;
+    width:100%;
+    padding:0;
+    position:absolute !important;
+    top:0px !important;
+    right:0px;
+    bottom:0px;
+    left:0px !important;
+}
+
+
 
 #incidenteForm{
     margin-top: 320px;
