@@ -183,6 +183,24 @@ class Usuario extends MY_Controller{
         
     }
     
+    public function loginAjax(){
+        if(!$this->input->is_ajax_request()){
+            redirect('404');
+        }
+        else{ 
+            if(!$this->_validarSesion()){
+                $error = json_encode(validation_errors());
+                $error = str_replace('"', "", $error);
+                $error = str_replace('<\/span>\n', "", $error);                 
+                $error = str_replace('<\/p>\n', "", $error);                 
+                echo '<div class="text-error">'.$error.'</div>';
+            }
+            else{
+                echo 'valido';
+            }
+        }
+    }
+    
     public function cerrar(){
         $this->session->unset_userdata('ultimoAcceso');
         $this->session->unset_userdata('usuario');
@@ -230,7 +248,36 @@ class Usuario extends MY_Controller{
         $this->mostrar($datos);
     }
     
-     public function validar($email){ 
+    public function registrarAjax(){
+        if(!$this->input->is_ajax_request()){
+            redirect('404');
+        }
+        else{
+            if($this->_validar()){
+                $usuario = new Usuario_model;
+                if($usuario->inicializar()){
+                    $datosEmail = array(
+                            'direccion' => '',
+                            'nombre'    => 'Ayuntamiento de Barbate',
+                            'asunto'    => 'Confirmación proceso registro',
+                            'texto'     => 'Para emprezar a usar la app Participación ciudadana usted necesita activar su dirección de e-mail. Se hace por razones de seguridad.  
+                                        Por favor, siga el siguiente enlace o acceda al enlace copiando y pegándolo en el navegador web:<br> 
+                                        <a href="' . base_url() . 'validar/' . urlencode($this->input->post('email')) . ' "> ' . base_url() . 'privado/validar/' . urlencode($this->input->post('email')) . '</a>',
+                            'destino' => strtolower($this->input->post('email'))
+                    );  
+                    //Enviamos email de confirmación
+                    $this->my_phpmailer->Enviar($datosEmail); 
+
+                    echo '<div class="success">Se ha enviado un email a su dirección de correo electrónico para confirmar el proceso de registro.</div>';
+                }            
+                else{
+                    echo '<div class="error">El proceso de registro no se ha realizado satisfactoriamente, por favor inténtelo de nuevo más tarde </div>';
+                }           
+            }            
+        }
+    }
+    
+    public function validar($email){ 
         $this->pagina = 'mensaje';
         $this->carpeta= "comun";
                

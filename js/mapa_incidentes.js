@@ -109,9 +109,6 @@ $(document).ready(function(){
                         lat : item.lat,
                         lng : item.lng,
                         title : item.name,
-                        icon:{
-                            url:"http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-                        }
                         
                     });
                 }    

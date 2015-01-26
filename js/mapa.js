@@ -14,17 +14,17 @@ $(document).ready(function(){
       map.addMarker({
         lat: position.coords.latitude,
         lng: position.coords.longitude,
-        title: 'You are here.',
+        title: 'Estas aquí.',
         infoWindow: {
-          content: 'You are here!'
+          content: 'Estas aquí.'
         }
       });
     },
     error: function(error){
-      alert('Geolocation failed: '+error.message);
+      alert('La geolocalización ha fallado: '+error.message);
     },
     not_supported: function(){
-      alert("Your browser does not support geolocation");
+      alert("La geolocalizaci\u00f3n no está soportada");
     }
   });
 });
