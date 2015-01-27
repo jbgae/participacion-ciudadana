@@ -65,6 +65,58 @@ class Incidente extends MY_Controller{
         $this->mostrar($datos);
     }
     
+    public function historialAjax(){
+        if(!$this->input->is_ajax_request()){
+            redirect('404');
+        }
+        else{
+            $incidentes = array();
+            if($this->session->userdata('usuario') == "ciudadano"){
+                $incidenteAux = Incidente_model::incidentes($this->session->userdata('email'));           
+            }
+            elseif($this->session->userdata('usuario') == "administrador"){
+                $incidenteAux = Incidente_model::incidentes();
+            }
+            $usuario = new Usuario_model;
+            $incidenteAux1 = new Incidente_model;
+
+
+            if(!empty($incidenteAux)){
+                foreach($incidenteAux as $incidente){
+                    $incidente->usuario = $usuario->nombre($incidente->emailUsuario).' '. $usuario->apellido1($incidente->emailUsuario). ' '.$usuario->apellido2($incidente->emailUsuario);
+                    $incidente->estado = $incidenteAux1->estado($incidente->IdEstado);
+
+                    $key =  date("d-m-Y", strtotime($incidente->fechaAlta));
+                    log_message("INFO", "Fecha=>". $incidente->fechaAlta);
+                    if(!isset($incidentes[$key])){
+                        $incidentes[$key] = array();
+                    }
+                    /*$incidenteAux = array(
+                        'Id'            => $incidente->Id,
+                        'rutaImagen'    => $incidente->rutaImagen,
+                        'usuario'       => $incidente->usuario,
+                        'descripcion'   => $incidente->descripcion,
+                        'estado'        => $incidente->estado
+                    */
+
+
+                    array_push($incidentes[$key], $incidente);
+
+                }
+            } 
+            
+            log_message("INFO", "/****************** HISTORIAL AJAX ***************/");
+            foreach($incidentes as $key => $i){
+                log_message("INFO", "Fecha=>". $key);
+                
+            }
+            
+            echo json_encode($incidentes);
+        
+        }
+        
+    }
+  
     public function mapa(){
         
         $this->permisos('ciudadano');
@@ -77,7 +129,7 @@ class Incidente extends MY_Controller{
     }
     
     
-    public function cargar(){
+    /*public function cargar(){
         if(!$this->input->is_ajax_request()){
             redirect('404');
         }
@@ -105,7 +157,7 @@ class Incidente extends MY_Controller{
             }
             echo json_encode($incidentes);
         }
-    }
+    }*/
     
     
     

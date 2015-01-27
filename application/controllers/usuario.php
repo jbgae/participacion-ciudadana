@@ -188,6 +188,7 @@ class Usuario extends MY_Controller{
             redirect('404');
         }
         else{ 
+            $email = $this->input->post('email');
             if(!$this->_validarSesion()){
                 $error = json_encode(validation_errors());
                 $error = str_replace('"', "", $error);
@@ -196,6 +197,31 @@ class Usuario extends MY_Controller{
                 echo '<div class="text-error">'.$error.'</div>';
             }
             else{
+                log_message("INFO", "sesion validada");
+                log_message("INFO",$email);
+                $usuario = new Usuario_model;
+                $usuario->datos($email);   
+                log_message("INFO",$this->db->last_query());
+                log_message("INFO", "datos usuario leidos");
+                $ultimoAcceso = $usuario->fechaUltimoAcceso();
+                $act = array(
+                    'Email' => $email,
+                    'NumeroIntentos' => 0,
+                    'FechaUltimoAcceso' => date('Y/m/d H:i:s')
+                );
+                $usuario->actualizar($email, $act);
+                log_message("INFO", "datos usuario actualizados");
+                $datosUsuario = array(
+                    'nombre'    => $usuario->nombre(),
+                    'apellidos' => $usuario->apellido1() .' '. $usuario->apellido2(),
+                    'email'     => $email,
+                    'usuario'   => $usuario->permiso(),
+                    'ultimoAcceso' => $ultimoAcceso,
+                    'logged_in' => TRUE
+                );                
+
+                $this->session->set_userdata($datosUsuario);
+                log_message("INFO", " SESION CREADA");
                 echo 'valido';
             }
         }
@@ -268,10 +294,10 @@ class Usuario extends MY_Controller{
                     //Enviamos email de confirmación
                     $this->my_phpmailer->Enviar($datosEmail); 
 
-                    echo '<div class="success">Se ha enviado un email a su dirección de correo electrónico para confirmar el proceso de registro.</div>';
+                    echo '<div class="text-success">Se ha enviado un email a su dirección de correo electrónico para confirmar el proceso de registro.</div>';
                 }            
                 else{
-                    echo '<div class="error">El proceso de registro no se ha realizado satisfactoriamente, por favor inténtelo de nuevo más tarde </div>';
+                    echo '<div class="text-error">El proceso de registro no se ha realizado satisfactoriamente, por favor inténtelo de nuevo más tarde </div>';
                 }           
             }            
         }

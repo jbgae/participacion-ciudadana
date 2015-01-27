@@ -40,7 +40,7 @@
 
 $route['loginAjax'] = "usuario/loginAjax";
 $route['registrarAjax'] = "usuario/registrarAjax";
-$route['cargar'] = "incidente/cargar";
+$route['cargar'] = "incidente/historialAjax";
 $route['mapa'] = "incidente/mapa";
 $route['validar/(:any)'] = "usuario/validar/$1";
 $route['historial'] = "incidente/historial";
