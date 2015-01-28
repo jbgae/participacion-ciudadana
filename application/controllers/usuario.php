@@ -232,7 +232,9 @@ class Usuario extends MY_Controller{
         $this->session->unset_userdata('usuario');
         
         $this->session->sess_destroy();
-        redirect('login');
+        if(!$this->input->is_ajax_request()){
+            redirect('login');
+        }        
     }
     
    

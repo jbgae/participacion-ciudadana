@@ -122,14 +122,14 @@ class Incidente extends MY_Controller{
         $this->permisos('ciudadano');
         $this->pagina = "mapa";
         $this->carpeta = "ciudadano";
-        $this->javascript = array("gmaps","mapa_incidentes", "mapa_incidentes");
+        $this->javascript = array("gmaps","mapa_incidentes");
         $this->estilo = array("mapa");
        
         $this->mostrar();
     }
     
     
-    /*public function cargar(){
+    public function cargar(){
         if(!$this->input->is_ajax_request()){
             redirect('404');
         }
@@ -157,7 +157,7 @@ class Incidente extends MY_Controller{
             }
             echo json_encode($incidentes);
         }
-    }*/
+    }
     
     
     
