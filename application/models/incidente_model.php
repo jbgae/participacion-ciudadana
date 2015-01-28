@@ -59,6 +59,8 @@ class Incidente_model extends CI_Model{
         return $aux;
     }
     
+    
+    
     static function incidentes($email = ""){
         if($email != ''){
             self::$db->where('emailUsuario', $email);

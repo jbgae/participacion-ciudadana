@@ -187,5 +187,29 @@ class Incidente extends MY_Controller{
         $this->mostrar($datos);
         
     }
+    
+    
+    
+    public function incidenteAjax($id){
+        if(!$this->input->is_ajax_request()){
+            redirect('404');
+        }
+        else{
+            if(Incidente_model::existe($id)){
+                $incidente = new Incidente_model;
+                $usuario = new Usuario_model;
+                $incidente->datos($id);
+                $incidente->usuario = $usuario->nombre($incidente->emailUsuario).' '. $usuario->apellido1($incidente->emailUsuario). ' '.$usuario->apellido2($incidente->emailUsuario);
+                $incidente->estado = $incidente->estado($incidente->IdEstado);
+
+                echo json_encode($incidente);
+
+            }
+            else{
+                echo "El incidente indicado no existe actualmente";
+            } 
+        }
+        
+    }
 }
 
