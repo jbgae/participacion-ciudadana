@@ -6,12 +6,11 @@
         <input type="password" name="password" id="password" placeholder="Contraseña">
         <?= form_error('password'); ?>
 
-        <input type="checkbox" name="chck-rememberme" id="chck-rememberme" checked="">
-        <label for="chck-rememberme">Recordarme</label>
+        <!--<input type="checkbox" name="chck-rememberme" id="chck-rememberme" checked="">
+        <label for="chck-rememberme">Recordarme</label>-->
 
 
         <?= form_submit($boton);  ?>
+        <?= anchor("restablecer", "He olvidado mi contraseña", array("class"=>"button"));?>
     <?= form_close(); ?>
-<p>
-    <?= anchor("restablecer", "He olvidado mi contraseña");?>
-</p>
+

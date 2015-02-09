@@ -8,7 +8,8 @@
 class Usuario_model extends CI_Model{
     
     var $email;
-    var $nombre;
+    var $dni;
+    var $nombre;   
     var $apellido1;
     var $apellido2;
     var $direccion;
@@ -18,7 +19,7 @@ class Usuario_model extends CI_Model{
     var $validado;
     var $numeroIntentos;
     var $fechaUltimoIntento;
-    var $fechaUltimoAcceso;
+    var $fechaUltimoAcceso;   
     
     private static $db;
         
@@ -34,6 +35,7 @@ class Usuario_model extends CI_Model{
         
         if($datos == ""){
             $this->email = strtolower($this->input->post('email'));
+            $this->dni = strtolower($this->input->post('dni'));
             $this->nombre = strtolower($this->input->post('nombre'));
             $this->apellido1 = strtolower($this->input->post('apellido1'));
             $this->apellido2 = strtolower($this->input->post('apellido2'));
@@ -113,6 +115,23 @@ class Usuario_model extends CI_Model{
         }
        
         return $this->email;
+    }
+    
+    public function dni($email = ''){
+        if($email != ''){
+            if($this->existe($email)){
+                $this->db->select('dni');
+                $this->db->from('usuario');
+                $this->db->where('email', $email);
+                $query = $this->db->get();
+
+                $usuario = $query->result();
+
+                $aux = $usuario[0]->dni;
+            }
+        }
+       
+        return $this->dni;
     }
     
     public function nombre($email = ''){

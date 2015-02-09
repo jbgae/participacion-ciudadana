@@ -18,7 +18,7 @@
         
         
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-
+        <script src="<?= base_url();?>js/jquery.js" type="text/javascript"></script>
         <?php if(isset($javascript)):?>
             <?php if(!is_array($javascript) && ($javascript != "")):?>
                 <script src="<?= base_url();?>js/<?= $javascript;?>.js" type="text/javascript"></script>

@@ -98,7 +98,7 @@ $(document).ready(function(){
       });
        
         
-    $.post("http://localhost/participacion_ciudadana/cargar",{ }, function(data){
+    $.post("http://localhost/participacion_ciudadana/incidente/cargar",{ }, function(data){
         markers_data = [];
         if(data.length > 0){
             for(var i = 0; i < data.length; i++){

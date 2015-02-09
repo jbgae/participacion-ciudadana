@@ -1,4 +1,5 @@
 <?php if(!defined('BASEPATH')) exit('No direct script access allowed');
+header("Access-Control-Allow-Origin: *");
 
 /**
  * Description of usuario
@@ -13,14 +14,67 @@ class Incidente extends MY_Controller{
         $this->load->model('usuario_model');
     }
     
+    private function _validar(){
+        
+        $checked = (isset($_POST['chck-position']))?true:false;
+        
+        if($checked){
+             $this->form_validation->set_rules('latitude', 'Latitud', 'trim|xss_clean');        
+            $this->form_validation->set_rules('longitude', 'Longitud', 'trim|xss_clean');  
+        }
+        else{
+            $this->form_validation->set_rules('direccion1', 'Dirección', 'trim|required|min_length[3]|xss_clean');
+        }
+             
+        $this->form_validation->set_rules('descripcion1', 'Longitud', 'trim|xss_clean');        
+
+        if (empty($_FILES['fileToUpload']['name'])){
+            $this->form_validation->set_rules('fileToUpload', 'La foto', 'required');
+        }
+        
+        $this->form_validation->set_message('required', '%s no puede estar vacio');
+        $this->form_validation->set_message('min_length', '%s debe tener mínimo %s caracteres');        
+        $this->form_validation->set_message('xss_clean', ' %s no es válido');
+        
+        return $this->form_validation->run();
+        
+    }
+    
     public function registrar(){
         $this->permisos('ciudadano');
         $this->pagina = "incidente";
         $this->javascript = array("camara","incidente", "gmaps","mapa");
         $this->carpeta = "ciudadano";
         
+        //if($this->_validar()){
+            
+        //}
+        
         $this->mostrar();
     }
+    
+    public function registrarAjax(){
+        
+        if($this->_validar()){
+            $incidente = new Incidente_model;
+            if($incidente->registrar()){
+                $mensaje = "El incidente se ha registrado con éxito";
+                echo '<div class="text-success">'.$mensaje.'</div>';
+            }
+            else{
+                $error = 'No se ha podido registrar el incidente en este momento';
+                echo '<div class="text-error">'.$error.'</div>';
+            }
+        }
+        else{
+            $error = json_encode(validation_errors());
+            $error = str_replace('"', "", $error);
+            $error = str_replace('<\/span>\n', "", $error);                 
+            $error = str_replace('<\/p>\n', "", $error);
+            
+            echo '<div class="text-error">'.$error.'</div>';
+        }
+    } 
     
     public function historial(){
         $this->permisos('ciudadano');
@@ -65,16 +119,16 @@ class Incidente extends MY_Controller{
         $this->mostrar($datos);
     }
     
-    public function historialAjax(){
-        if(!$this->input->is_ajax_request()){
+    public function historialAjax($email, $user){
+        /*if(!$this->input->is_ajax_request()){
             redirect('404');
         }
-        else{
+        else{*/
             $incidentes = array();
-            if($this->session->userdata('usuario') == "ciudadano"){
-                $incidenteAux = Incidente_model::incidentes($this->session->userdata('email'));           
+            if($user == "ciudadano"){
+                $incidenteAux = Incidente_model::incidentes($email);           
             }
-            elseif($this->session->userdata('usuario') == "administrador"){
+            elseif($user == "administrador"){
                 $incidenteAux = Incidente_model::incidentes();
             }
             $usuario = new Usuario_model;
@@ -113,7 +167,7 @@ class Incidente extends MY_Controller{
             
             echo json_encode($incidentes);
         
-        }
+       // }
         
     }
   
@@ -129,34 +183,40 @@ class Incidente extends MY_Controller{
     }
     
     
-    public function cargar(){
-        if(!$this->input->is_ajax_request()){
-            redirect('404');
+    public function cargar($email = "", $user =""){
+        
+        if($email == ""){
+            $email = $this->session->userdata('email');
         }
-        else{
-            $incidentes = array();
-            if($this->session->userdata('usuario') == "ciudadano"){
-                $incidenteAux = Incidente_model::incidentes($this->session->userdata('email'));           
-            }
-            elseif($this->session->userdata('usuario') == "administrador"){
-                $incidenteAux = Incidente_model::incidentes();
-            }
-            
-            if(!empty($incidenteAux)){
-                $i = 0;
-                foreach($incidenteAux as $inc){
-                    $incidentes[$i] = array(
-                        'title'=>$inc->fechaAlta,
-                        'lat' =>$inc->latitud,
-                        'lng' =>$inc->longitud,
-                        
-                    );
-                    $i++;
-                }
-                
-            }
-            echo json_encode($incidentes);
+        if($user == ""){
+            $user = $this->session->userdata('usuario');
         }
+       
+        $incidentes = array();
+        if($user == "ciudadano"){
+            $incidenteAux = Incidente_model::incidentes($email);           
+        }
+        elseif($user == "administrador"){
+            $incidenteAux = Incidente_model::incidentes();
+        }
+
+        if(!empty($incidenteAux)){
+            $i = 0;
+            foreach($incidenteAux as $inc){
+                $incidentes[$i] = array(
+                    'title'=>$inc->fechaAlta,
+                    'lat' =>$inc->latitud,
+                    'lng' =>$inc->longitud,
+
+                );
+                $i++;
+            }
+            /**** CARGAR MAPA ****/
+   //         log_message("INFO", "lat-> ".$incidentes[$i]['lat']. " long-> ".$incidentes[$i]['long']);
+
+        }
+        echo json_encode($incidentes);
+       
     }
     
     
@@ -191,10 +251,10 @@ class Incidente extends MY_Controller{
     
     
     public function incidenteAjax($id){
-        if(!$this->input->is_ajax_request()){
+        /*if(!$this->input->is_ajax_request()){
             redirect('404');
         }
-        else{
+        else{*/
             if(Incidente_model::existe($id)){
                 $incidente = new Incidente_model;
                 $usuario = new Usuario_model;
@@ -208,7 +268,7 @@ class Incidente extends MY_Controller{
             else{
                 echo "El incidente indicado no existe actualmente";
             } 
-        }
+        //}
         
     }
 }

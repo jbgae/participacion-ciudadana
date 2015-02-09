@@ -1,5 +1,5 @@
 <?php if(!defined('BASEPATH')) exit('No direct script access allowed');
-
+header("Access-Control-Allow-Origin: *");
 /**
  * Description of usuario
  *
@@ -20,11 +20,11 @@ class Usuario extends MY_Controller{
     private function _validarSesion(){
         $this->form_validation->set_rules('email', 'Email', 'trim|required|min_length[3]|valid_email|xss_clean|callback_existeUsuario|callback_confirmarPassword|callback_numeroIntentos|callback_usuarioValidado');
         $this->form_validation->set_rules('password', 'Contraseña', 'trim|required|min_length[6]|xss_clean');        
-        $this->form_validation->set_message('existeUsuario', 'No existe ningún usuario con el email indicado.');
+        $this->form_validation->set_message('existeUsuario', 'No existe ning&uacute;n usuario con el email indicado.');
         $this->form_validation->set_message('usuarioValidado', 'El email introducido no esta validado.');
         $this->form_validation->set_message('numeroIntentos', 'La cuenta esta bloqueada temporalmente.');
         $this->form_validation->set_message('confirmarPassword', 'El email o la contraseña son incorrectas.');        
-        $this->form_validation->set_message('required', '%s no puede estar vacio');
+        $this->form_validation->set_message('required', '%s no puede estar vac&iacute;o');
         $this->form_validation->set_message('min_length', '%s debe tener mínimo %s caracteres');
         $this->form_validation->set_message('valid_email', '%s no es válido');
         $this->form_validation->set_message('xss_clean', ' %s no es válido');
@@ -184,10 +184,10 @@ class Usuario extends MY_Controller{
     }
     
     public function loginAjax(){
-        if(!$this->input->is_ajax_request()){
+        /*if(!$this->input->is_ajax_request()){
             redirect('404');
         }
-        else{ 
+        else{*/
             $email = $this->input->post('email');
             if(!$this->_validarSesion()){
                 $error = json_encode(validation_errors());
@@ -215,16 +215,14 @@ class Usuario extends MY_Controller{
                     'nombre'    => $usuario->nombre(),
                     'apellidos' => $usuario->apellido1() .' '. $usuario->apellido2(),
                     'email'     => $email,
-                    'usuario'   => $usuario->permiso(),
-                    'ultimoAcceso' => $ultimoAcceso,
-                    'logged_in' => TRUE
+                    'usuario'   => $usuario->permiso()                    
                 );                
 
-                $this->session->set_userdata($datosUsuario);
+                //$this->session->set_userdata($datosUsuario);
                 log_message("INFO", " SESION CREADA");
-                echo 'valido';
+                echo $datosUsuario;
             }
-        }
+       // }
     }
     
     public function cerrar(){
@@ -277,10 +275,10 @@ class Usuario extends MY_Controller{
     }
     
     public function registrarAjax(){
-        if(!$this->input->is_ajax_request()){
+        /*if(!$this->input->is_ajax_request()){
             redirect('404');
         }
-        else{
+        else{*/
             if($this->_validar()){
                 $usuario = new Usuario_model;
                 if($usuario->inicializar()){
@@ -302,7 +300,7 @@ class Usuario extends MY_Controller{
                     echo '<div class="text-error">El proceso de registro no se ha realizado satisfactoriamente, por favor inténtelo de nuevo más tarde </div>';
                 }           
             }            
-        }
+        //}
     }
     
     public function validar($email){ 

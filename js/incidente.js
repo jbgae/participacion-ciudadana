@@ -1,26 +1,19 @@
 $(document).ready(function(){
     $("#direccion").hide();
-    $("#examinar").hide();
+    //$("#examinar").hide();
     $("#chck-position").change(function(){ 
         if($(this).is(':checked')) {
-            $("#geolocation_map").show();
-            $("#direccion").hide();
+            $("#geolocation_map").fadeIn('slow');
+            $("#incidenteForm").css("margin-top", 320);
+            $("#direccion").fadeOut('slow');
         }
         else{
-            $("#geolocation_map").hide();
-            $("#direccion").show();
+            $("#geolocation_map").fadeOut('fast');
+            $("#incidenteForm").css("margin-top", 20);
+            $("#direccion").show('slow');
         } 
    });
    
-    $('input[type="radio"]').click(function(){
-        if($(this).attr("value")=="1"){
-            $("#examinar").hide();
-            $("#camara").show();
-        }
-        if($(this).attr("value")=="2"){
-            $("#examinar").show();
-            $("#camara").hide();
-        }
-    });
+   
 });
 

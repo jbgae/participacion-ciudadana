@@ -42,6 +42,32 @@ class Incidente_model extends CI_Model{
         return $this;
     }
     
+    public function registrar(){
+        $aux = FALSE;
+        $this->load->library('upload');
+        if (!empty($_FILES['fileToUpload']['name']))
+        {
+            $config['upload_path'] = base_url()."imagenes";
+            $config['allowed_types'] = 'gif|jpg|png|jpeg';     
+
+            $this->upload->initialize($config);
+
+            if ($this->upload->do_upload('fileToUpload')){
+                $config['upload_path'] =  realpath("$path/images/fotos/" );
+                $config['allowed_types'] = 'gif|jpg|jpeg|png|PNG|JPG|JPEG|GIF';
+                $config['max_size']	= '0';
+                $config['max_width']  = '0';
+                $config['max_height']  = '0';
+                $this->load->library('upload',$config);
+            }
+            //else{
+                //echo $this->upload->display_errors();
+              //  return $aux;
+            //}
+        }
+        return $aux;
+    }
+    
     public function estado($id = ""){
         $aux = "";        
         
