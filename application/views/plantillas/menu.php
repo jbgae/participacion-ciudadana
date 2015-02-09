@@ -23,16 +23,17 @@
                     <?php elseif($this->session->userdata("usuario")== 'ciudadano'):?>
                         <li class="divider">Menu</li>
 
-                        <li><?= anchor('incidente', "Registrar incidente");?></li>
-                        <li><?= anchor('historial', "Historial");?></li>
-                        <li><?= anchor('cerrar', "Salir");?></li>
+                        <li><?= anchor('incidente', "Registrar incidente", array("class"=>"icon location"));?></li>
+                        <li><?= anchor('historial', "Historial", array("class"=>"icon graph"));?></li>
+                        <li><?= anchor('cerrar', "Salir", array("class"=>"icon close"));?></li>
 
                     <?php elseif($this->session->userdata("usuario")== 'administrador'):?>
                         <li class="divider">Menu</li>
 
-                        <li><?= anchor('incidente', "Registrar incidente");?></li>
-                        <li><?= anchor('historial', "Historial");?></li>
-                        <li><?= anchor('cerrar', "Salir");?></li>
+                        <li><?= anchor('incidente', "Registrar incidente", array("class"=>"icon location"));?></li>
+                        <li><?= anchor('departamentos',"Áreas", array("class"=>"icon pin"));?></li>
+                        <li><?= anchor('historial', "Historial", array("class"=>"icon graph"));?></li>
+                        <li><?= anchor('cerrar', "Salir", array("class"=>"icon close"));?></li>
 
                     <?php endif;?>
                     

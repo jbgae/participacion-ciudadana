@@ -4,7 +4,7 @@
  *
  * @author jbgae_000
  */
-class Imagen_model {
+class Imagen_model extends CI_Model{
    
     var $ruta;
     var $nombre;
@@ -22,6 +22,7 @@ class Imagen_model {
     public function inicializar(){
         $aux = FALSE;
         $path = getcwd();
+        log_message("info", "/*************Inicializar imagen*************/");
         if(!is_dir(realpath("$path/imagenes"))){           
             mkdir("$path/archivos/imagenes", 0755);     
         }   
@@ -32,7 +33,7 @@ class Imagen_model {
         $config['max_height']  = '0';
         $this->load->library('upload',$config);
 
-        if ($this->upload->do_upload('archivo')){ 
+        if ($this->upload->do_upload('fileToUpload')){ 
             log_message('info','Archivo subido con éxito');
             $archivo = $this->upload->data();     
             $config['image_library'] = 'gd2';
@@ -41,10 +42,10 @@ class Imagen_model {
             $config['create_thumb'] = TRUE;
             $config['maintain_ratio'] = TRUE;
             //CARPETA EN LA QUE GUARDAMOS LA MINIATURA
-            if(!is_dir(realpath("$path/images/thumb/"))){           
-                mkdir("$path/images/thumb/", 0755);     
+            if(!is_dir(realpath("$path/imagenes/"))){           
+                mkdir("$path/imagenes/", 0755);     
             }
-            $config['new_image']=realpath("$path/images/fotos/thumb/" );
+            $config['new_image']=realpath("$path/imagenes/" );
             $config['width'] = 200;
             $config['height'] = 200;
             $this->image_lib->initialize($config);
@@ -53,7 +54,7 @@ class Imagen_model {
             $this->image_lib->clear();
             unlink(realpath("$path/imagenes/".$archivo['file_name'] ));
 
-            $this->ruta = base_url().'imagenes/thumb/'.$archivo['raw_name'].'_thumb'.$archivo['file_ext'];
+            $this->ruta = base_url().'imagenes/'.$archivo['raw_name'].'_thumb'.$archivo['file_ext'];
             $this->nombre = $archivo['raw_name'];
             $this->extension = $archivo['file_ext'];
 
@@ -156,7 +157,7 @@ class Imagen_model {
     static function existe($codigo){
         $aux = FALSE;
   
-        $query = self::$db->get_where('Archivo', array('Codigo'=>$codigo));
+        $query = self::$db->get_where('imagen', array('idImagen'=>$codigo));
         
         if($query->num_rows() > 0){
             $aux = TRUE;

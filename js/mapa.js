@@ -1,30 +1,42 @@
 var map;
-$(document).ready(function(){
-  var map = new GMaps({
-    el: '#geolocation_map',
-    lat: 36.191361199999996,
-    lng: -5.9168119,
-    zoom:16
-  });
-  GMaps.geolocate({
-    success: function(position){
-      map.setCenter(position.coords.latitude, position.coords.longitude);
-      $("input[id=latitude]").val(position.coords.latitude);
-      $("input[id=longitude]").val(position.coords.longitude);
-      map.addMarker({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-        title: 'Estas aquí.',
-        infoWindow: {
-          content: 'Estas aquí.'
+$(document).ready(function(){ 
+
+    var map = new GMaps({
+        el: '#geolocation_map',
+        lat: 36.191361199999996,
+        lng: -5.9168119,
+        zoom:16,
+        disableDefaultUI: true,
+        zoomControl: true
+    });
+    
+    GMaps.geolocate({
+        success: function(position){
+            map.setCenter(position.coords.latitude, position.coords.longitude);
+            var ll  = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            var m = map.addMarker({
+                position:ll,
+                draggable:true,
+                infoWindow: {
+                  content: 'Posición de la incidencia.'
+                }
+            });
+            $("input[id=latitude]").val(position.coords.latitude);
+            $("input[id=longitude]").val(position.coords.longitude);
+
+            google.maps.event.addListener(m, 'dragend', function(ev){
+                ll = m.getPosition();                
+                $("input[id=latitude]").val(ll.lat());
+                $("input[id=longitude]").val(ll.lng());
+            });
+        },
+        error: function(error){
+            alert('La geolocalización ha fallado: '+error.message);
+        },
+        not_supported: function(){
+            alert("La geolocalizaci\u00f3n no está soportada");
         }
-      });
-    },
-    error: function(error){
-      alert('La geolocalización ha fallado: '+error.message);
-    },
-    not_supported: function(){
-      alert("La geolocalizaci\u00f3n no está soportada");
-    }
-  });
+    });
+
 });
+

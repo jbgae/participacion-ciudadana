@@ -12,7 +12,7 @@ class Incidente_model extends CI_Model{
     var $direccion;
     var $latitud;
     var $longitud;
-    var $rutaImagen;
+    var $IdImagen;
     var $emailUsuario;
     var $IdEstado;
     
@@ -35,36 +35,32 @@ class Incidente_model extends CI_Model{
         $this->direccion = $incidencia[0]->direccion;
         $this->latitud = $incidencia[0]->latitud;
         $this->longitud = $incidencia[0]->longitud;
-        $this->rutaImagen = $incidencia[0]->rutaImagen;
+        $this->IdImagen = $incidencia[0]->IdImagen;
         $this->emailUsuario = $incidencia[0]->emailUsuario;
         $this->IdEstado = $incidencia[0]->IdEstado;
         
         return $this;
     }
     
-    public function registrar(){
+    public function registrar($idImagen = null){
         $aux = FALSE;
-        $this->load->library('upload');
-        if (!empty($_FILES['fileToUpload']['name']))
-        {
-            $config['upload_path'] = base_url()."imagenes";
-            $config['allowed_types'] = 'gif|jpg|png|jpeg';     
-
-            $this->upload->initialize($config);
-
-            if ($this->upload->do_upload('fileToUpload')){
-                $config['upload_path'] =  realpath("$path/images/fotos/" );
-                $config['allowed_types'] = 'gif|jpg|jpeg|png|PNG|JPG|JPEG|GIF';
-                $config['max_size']	= '0';
-                $config['max_width']  = '0';
-                $config['max_height']  = '0';
-                $this->load->library('upload',$config);
-            }
-            //else{
-                //echo $this->upload->display_errors();
-              //  return $aux;
-            //}
+        
+        $this->descripcion = $this->input->post("descripcion1");
+        if($this->input->post("direccion1") == ""){
+            $this->direccion = null;
         }
+        else{
+            $this->direccion = $this->input->post("direccion1");
+        }
+        $this->latitud = $this->input->post("latitude");
+        $this->longitud = $this->input->post("longitude");
+        $this->emailUsuario = $this->session->userdata("email");
+        $this->IdImagen = $idImagen;
+        $this->IdEstado = "2";
+        if($this->db->insert('incidencia', $this)){
+            $aux = TRUE;
+        } 
+        
         return $aux;
     }
     
@@ -81,6 +77,23 @@ class Incidente_model extends CI_Model{
             $estado = $query->result();
             $aux = $estado[0]->Estado;
         }        
+        
+        return $aux;
+    }
+    
+    public function idImagen($id = ""){
+        $aux = "";        
+        
+        if($id != ""){
+            $this->db->select("IdImagen");
+            $this->db->where("Id", $id);
+            $this->db->from("incidencia");
+
+            $query = $this->db->get();
+
+            $estado = $query->result();
+            $aux = $estado[0]->IdImagen;
+        }
         
         return $aux;
     }

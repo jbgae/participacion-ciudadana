@@ -1,8 +1,9 @@
+<!-- MAPA-->
+<div id="geolocation_map"></div><br>
 
-
- <div id="geolocation_map"></div><br>
+<!--FORMULARIO-->
 <div class="formGroupHead"></div>
-<?= form_open_multipart('',array('class'=>'form', 'id'=>'incidenteForm'));?>
+<?= form_open_multipart('incidente/registrar',array('class'=>'form', 'id'=>'incidenteForm'));?>
 
     <input type="text" name="direccion1" id="direccion" value="" placeholder="Dirección">
 
@@ -18,25 +19,18 @@
     <h3>Imagen</h3>
     
     <br>
-    <div id="examinar">
-        <input type="file" name="fileToUpload" id="fileToUpload" onchange="fileSelected();" accept="image/*" capture="camera" ><br>            
-        <input type="button" onclick="uploadFile()" value="Subir imagen" class="button" />
-    </div>
+    
+    <input type="file" name="fileToUpload" id="fileToUpload"><br>            
+    <?= form_submit($boton);?>
+    
     <br>
 
 
-    <div id="details"></div>
-    <div>
-
-    </div>
-
-    <div id="progress"></div>
+    <div id="details"><?= validation_errors();?></div>
     
-    
-          
-         
-    
-
+    <?php if (isset($mensaje)):?>
+        <div id="progress"><?= $mensaje;?></div>
+    <?php endif;?>    
 <?= form_close();?>
  
 

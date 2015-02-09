@@ -12,25 +12,27 @@ class Incidente extends MY_Controller{
         parent:: __construct();
         $this->load->model('incidente_model');
         $this->load->model('usuario_model');
+        $this->load->model('imagen_model');
+        $this->load->library('form_validation');
     }
     
     private function _validar(){
         
-        $checked = (isset($_POST['chck-position']))?true:false;
+        $checked = (isset($_POST['chck-position']))? true:false;
         
         if($checked){
-             $this->form_validation->set_rules('latitude', 'Latitud', 'trim|xss_clean');        
+            $this->form_validation->set_rules('latitude', 'Latitud', 'trim|xss_clean');        
             $this->form_validation->set_rules('longitude', 'Longitud', 'trim|xss_clean');  
         }
         else{
             $this->form_validation->set_rules('direccion1', 'Dirección', 'trim|required|min_length[3]|xss_clean');
         }
              
-        $this->form_validation->set_rules('descripcion1', 'Longitud', 'trim|xss_clean');        
+        $this->form_validation->set_rules('descripcion1', 'Longitud', 'trim|required|xss_clean');        
 
-        if (empty($_FILES['fileToUpload']['name'])){
+        /*if (empty($_FILES['fileToUpload']['name'])){
             $this->form_validation->set_rules('fileToUpload', 'La foto', 'required');
-        }
+        }*/
         
         $this->form_validation->set_message('required', '%s no puede estar vacio');
         $this->form_validation->set_message('min_length', '%s debe tener mínimo %s caracteres');        
@@ -46,11 +48,35 @@ class Incidente extends MY_Controller{
         $this->javascript = array("camara","incidente", "gmaps","mapa");
         $this->carpeta = "ciudadano";
         
-        //if($this->_validar()){
-            
-        //}
+        $datos['boton'] = array(            
+            "id"=>"btn-submit",
+            "class"=>"button",
+            'name'=>'button', 
+            'value'=>'Registrar incidente'
+        );
         
-        $this->mostrar();
+        if($this->_validar()){
+            $codigoImagen = "";
+            if (!empty($_FILES['fileToUpload']['name'])){
+                $imagen = new Imagen_model;
+                $imagen->inicializar();
+                $codigoImagen = $imagen->codigo();
+                log_message("info","Codigo de imagen: $codigoImagen");
+            }
+            $incidente = new Incidente_model;
+            $aux = FALSE;
+            if($codigoImagen == ""){
+                $aux = $incidente->registrar();
+            }
+            else{
+                $aux = $incidente->registrar($codigoImagen);
+            }
+            if($aux){
+                $datos['mensaje'] = "La incidencia se ha registrado satisfactoriamente";
+            }
+        }
+        
+        $this->mostrar($datos);
     }
     
     public function registrarAjax(){
@@ -90,12 +116,14 @@ class Incidente extends MY_Controller{
         }
         $usuario = new Usuario_model;
         $incidenteAux1 = new Incidente_model;
-        
+        $imagen = new Imagen_model;
         
         if(!empty($incidenteAux)){
             foreach($incidenteAux as $incidente){
                 $incidente->usuario = $usuario->nombre($incidente->emailUsuario).' '. $usuario->apellido1($incidente->emailUsuario). ' '.$usuario->apellido2($incidente->emailUsuario);
                 $incidente->estado = $incidenteAux1->estado($incidente->IdEstado);
+                
+                $incidente->rutaImagen = $imagen->ruta($incidente->IdImagen);
                 
                 $key =  date("d-m-Y", strtotime($incidente->fechaAlta));
                 if(!isset($datos['incidentes'][$key])){
@@ -207,7 +235,7 @@ class Incidente extends MY_Controller{
                     'title'=>$inc->fechaAlta,
                     'lat' =>$inc->latitud,
                     'lng' =>$inc->longitud,
-
+                    //  'tipo'=>$inc->tipo
                 );
                 $i++;
             }
@@ -231,11 +259,14 @@ class Incidente extends MY_Controller{
         $datos = array();
         
         if(Incidente_model::existe($id)){
+            
+            $imagen = new Imagen_model;
             $incidente = new Incidente_model;
             $usuario = new Usuario_model;
             $incidente->datos($id);
             $incidente->usuario = $usuario->nombre($incidente->emailUsuario).' '. $usuario->apellido1($incidente->emailUsuario). ' '.$usuario->apellido2($incidente->emailUsuario);
             $incidente->estado = $incidente->estado($incidente->IdEstado);
+            $incidente->rutaImagen = $incidente->rutaImagen = $imagen->ruta($incidente->IdImagen);
             
             $datos['incidente'] = $incidente;
             
