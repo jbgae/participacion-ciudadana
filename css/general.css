@@ -49,12 +49,21 @@ div#main.panel.y-scroll>ul.list>li>a>p.ui-li-aside{
     margin-top:-80px;
 }
 
-div#main.panel.y-scroll>form#incidenteForm.form>label{
-    float:left;
-    margin-left: 25px;
-    margin-bottom: 5px;
+html>body>div#afui>div#content>div#main>div#tabla>div#departamento_wrapper>div#departamento_length>label,
+html > body > div#afui > div#content.hasMenu.splitview > div#main.panel.y-scroll > div#tabla > div#departamento_wrapper.dataTables_wrapper.no-footer > div#departamento_filter.dataTables_filter > label{
+    width:100%;
 }
 
-div#main.panel.y-scroll>form#incidenteForm.form>label{
-    width:100%;
+html>body>div#afui>div#content>div#main>div#tabla>div#departamento_wrapper>div#departamento_length>label>select{
+    padding:0px;
+    height:30px;
+    width:45px;
+    //display:inline;
+}
+
+html>body>div#afui>div#content>div#main>div#tabla>div#departamento_wrapper.dataTables_wrapper.no-footer>div#departamento_filter.dataTables_filter>label>input{
+    height:30px;
+    padding:0px;
+    padding-left:15px;
+    
 }

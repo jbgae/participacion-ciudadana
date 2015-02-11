@@ -37,7 +37,7 @@ $(document).ready(function(){
     
     map.addControl({
         position: 'top_right',
-        content: '<input type="checkbox" name="option1" value="Reparadas"> Reparadas<br><input type="checkbox" name="option1" value="En proceso"> En proceso<br><input type="checkbox" name="option1" value="Rechazadas"> Rechazadas<br>',
+        content: '<span style="box-sizing: border-box; position:relative;line-height:0; font-size:0px; margin 0px 5px 0px 0px; display: inline-block; background-color:rgb(255,255,255); border:1px solid rgb(198,198,198); border-radius:1px; width:13px; height:13px; vertical-align:middle;" role="checkbox">Reparadas</span><br><span> En proceso</span><br><span>Rechazadas<br></span>',
         style: {
           margin: '5px 5px 5px 5px',
           padding: '10px 10px',

@@ -1,6 +1,8 @@
 var map;
 $(document).ready(function(){ 
-
+    
+   var image = "http://localhost/participacion_ciudadana/css/images/marcadorR.gif";
+    
     var map = new GMaps({
         el: '#geolocation_map',
         lat: 36.191361199999996,
@@ -17,6 +19,7 @@ $(document).ready(function(){
             var m = map.addMarker({
                 position:ll,
                 draggable:true,
+                icon: image,
                 infoWindow: {
                   content: 'Posición de la incidencia.'
                 }

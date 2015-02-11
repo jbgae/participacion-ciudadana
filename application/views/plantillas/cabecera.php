@@ -21,10 +21,18 @@
         <script src="<?= base_url();?>js/jquery.js" type="text/javascript"></script>
         <?php if(isset($javascript)):?>
             <?php if(!is_array($javascript) && ($javascript != "")):?>
-                <script src="<?= base_url();?>js/<?= $javascript;?>.js" type="text/javascript"></script>
+                <?php if($javascript[0] === "/"):?>
+                    <script src="<?= $javascript;?>.js" type="text/javascript"></script>
+                <?php else:?>
+                    <script src="<?= base_url();?>js/<?= $javascript;?>.js" type="text/javascript"></script>
+                <?php endif;?>    
             <?php else:?>
                 <?php foreach($javascript as $js):?>
-                    <script src="<?= base_url();?>js/<?= $js;?>.js" type="text/javascript"></script>
+                    <?php if($js[0] === "/"):?>
+                        <script src="<?= $js;?>.js" type="text/javascript"></script>
+                    <?php else:?>
+                        <script src="<?= base_url();?>js/<?= $js;?>.js" type="text/javascript"></script>
+                    <?php endif;?>    
                 <?php endforeach;?>
             <?php endif;?>        
         <?php endif;?>
@@ -36,10 +44,18 @@
         <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/incidente.css">
         <?php if(isset($estilo)):?>
             <?php if(!is_array($estilo) && ($estilo != "")):?>
-                <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/<?= $estilo;?>.css">
+                <?php if($estilo[0] === "/"):?>
+                    <link rel="stylesheet" type="text/css" href="<?= $estilo;?>.css">
+                <?php else:?>
+                    <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/<?= $estilo;?>.css">
+                <?php endif;?>    
             <?php else:?>
                 <?php foreach($estilo as $css):?>
-                    <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/<?= $css;?>.css">
+                    <?php if($css[0] === "/"):?>
+                        <link rel="stylesheet" type="text/css" href="<?= $css;?>.css">
+                    <?php else:?>
+                        <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/<?= $css;?>.css">
+                    <?php endif;?>    
                 <?php endforeach;?>
             <?php endif;?>        
         <?php endif;?>
