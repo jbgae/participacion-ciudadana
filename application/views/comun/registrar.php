@@ -1,6 +1,4 @@
-    <?php if(isset($mensaje)):?>
-        <?= $mensaje;?>
-    <?php endif;?>
+    
     
     <div class="formGroupHead">Registrar</div>
        
@@ -12,10 +10,10 @@
         
         
         <input type="text" name="apellido1" id="apellido1" value="" placeholder="Primer apellido">
-        <?= form_error('email'); ?>
+        <?= form_error('apellido1'); ?>
         
         
-        <input type="text" name="apellido2" id="apellido1" value="" placeholder="Segundo apellido">
+        <input type="text" name="apellido2" id="apellido2" value="" placeholder="Segundo apellido">
         <?= form_error('apellido2'); ?>
         
         
@@ -38,7 +36,12 @@
         <input type="password" name="password-confirm" id="password-confirm" value="" placeholder="Confirmar contraseña">
         <?= form_error('password-confirm'); ?>
         
+        <?php if(isset($mensaje)):?>
+        <?= $mensaje;?>
+    <?php endif;?>
+        
        <?= form_submit($boton);  ?>
     <?= form_close();?>
-	        
+      
 </div>
+

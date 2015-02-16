@@ -1,8 +1,9 @@
-<div role="main" class="ui-content">
-    <?= form_open("restablecer");?>    
+
+    <?= form_open("restablecer");?>
+    <br>
         <h3>Nueva contraseña</h3>
-        <label for="email">Introduzca su email</label>
-        <input type="text" name="email" id="email" value="">
+        <br>
+        <input type="text" name="email" id="email" value="" placeholder="Introduzca su email">
         <?= form_error('email');?>        
         <?= form_submit($boton);?>
         <?php if(isset($errorUsuario)):?>
@@ -12,4 +13,3 @@
             <div class="message success"><?= $mensaje;?></div>
         <?php endif;?>
     <?= form_close();?>
-</div>

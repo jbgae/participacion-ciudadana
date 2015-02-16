@@ -1,22 +1,55 @@
-<ul class="list">
-    <?php if(!empty($incidentes)):?>
-        <?php foreach($incidentes as $key=>$incidente):?>
-            <li class="divider">
-                <strong><?= $key;?></strong>
-                <span class="ui-li-count"><?= count($incidente);?></span>
-            </li>
-            <?php foreach ($incidente as $incidenteAux):?>
-            <li>
-                
-                <?= anchor("ver/incidente/$incidenteAux->Id", "<img src=\"$incidenteAux->rutaImagen\">"
-                                                        . "<h2>$incidenteAux->usuario</h2>".
-                                                        "<p>$incidenteAux->descripcion</p>".
-                                                        "<p class=\"ui-li-aside\"><strong>$incidenteAux->estado</strong></p>");?>
-            </li>
-            <?php endforeach;?>
-        <?php endforeach;?>
-    <?php else:?>
-            <li>Actualmente no hay incidentes registrados</li>
-    <?php endif;?>        
-</ul>
-
+<div id="tabla">
+    <table id="historial" class="display" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Usuario</th>
+                <th>Estado</th>
+                <th>Descripción</th>
+                <th>Imagen</th>
+                <th>Opciones</th>
+            </tr>
+        </thead> 
+        <tbody>
+             <?php if(!empty($incidentes)):?>
+                <?php foreach($incidentes as $key=>$incidente):?>
+                    <tr>
+                        <td><?= $incidente->fechaAlta;?></td>                        
+                        <td><?= $incidente->usuario;?></td>
+                        <td class="center"> 
+                        <?php if($incidente->IdEstado == 1):?>
+                            <span class="reparado">
+                                Reparado
+                        <?php elseif($incidente->IdEstado == 2):?>
+                            <span class="proceso">
+                                Proceso
+                        <?php elseif($incidente->IdEstado == 3):?>
+                            <span class="rechazado">
+                                Rechazado
+                        <?php endif;?>
+                            </span>    
+                        </td>
+                        <td><?= $incidente->descripcion?></td>
+                        <td>
+                            <?php if (file_exists($incidente->rutaImagen)):?>
+                                <img src="<?=$incidente->rutaImagen;?>">
+                            <?php else:?>
+                                <img src="<?= base_url();?>imagenes/1_thumb.jpg">
+                            <?php endif;?>    
+                        </td>
+                        <td class="center">
+                            <?= anchor("ver/incidente/".$incidente->Id,"Editar", array("class"=>"icon tools"));?><br>
+                            <!-- anchor("#","Eliminar", array("class"=>"icon trash open"));?>-->
+                            <a href ="#" class="icon trash open" id="<?= $incidente->Id;?>">Eliminar </a>
+                        </td>
+                        
+                    </tr>
+                <?php endforeach;?>
+            <?php endif;?>
+        </tbody>
+    </table>
+    
+    <div id="dialog-confirm" title="Eliminar incidencia">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Esta incidencia será eliminada. ¿Desea continuar?</p>
+    </div>
+</div>

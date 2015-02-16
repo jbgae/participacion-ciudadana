@@ -1,79 +1,96 @@
 $(function() {
-var dialog, form,
-// From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
-    emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
-    name = $( "#name" ),
-email = $( "#email" ),
-password = $( "#password" ),
-allFields = $( [] ).add( name ).add( email ).add( password ),
-tips = $( ".validateTips" );
-function updateTips( t ) {
-tips
-.text( t )
-.addClass( "ui-state-highlight" );
-setTimeout(function() {
-tips.removeClass( "ui-state-highlight", 1500 );
-}, 500 );
-}
-function checkLength( o, n, min, max ) {
-if ( o.val().length > max || o.val().length < min ) {
-o.addClass( "ui-state-error" );
-updateTips( "Length of " + n + " must be between " +
-min + " and " + max + "." );
-return false;
-} else {
-return true;
-}
-}
-function checkRegexp( o, regexp, n ) {
-if ( !( regexp.test( o.val() ) ) ) {
-o.addClass( "ui-state-error" );
-updateTips( n );
-return false;
-} else {
-return true;
-}
-}
-function addUser() {
-var valid = true;
-allFields.removeClass( "ui-state-error" );
-valid = valid && checkLength( name, "username", 3, 16 );
-valid = valid && checkLength( email, "email", 6, 80 );
-valid = valid && checkLength( password, "password", 5, 16 );
-valid = valid && checkRegexp( name, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
-valid = valid && checkRegexp( email, emailRegex, "eg. ui@jquery.com" );
-valid = valid && checkRegexp( password, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9" );
-if ( valid ) {
-$( "#users tbody" ).append( "<tr>" +
-"<td>" + name.val() + "</td>" +
-"<td>" + email.val() + "</td>" +
-"<td>" + password.val() + "</td>" +
-"</tr>" );
-dialog.dialog( "close" );
-}
-return valid;
-}
-dialog = $( "#dialog-form" ).dialog({
-autoOpen: false,
-height: 300,
-width: 350,
-modal: true,
-buttons: {
-"Create an account": addUser,
-Cancel: function() {
-dialog.dialog( "close" );
-}
-},
-close: function() {
-form[ 0 ].reset();
-allFields.removeClass( "ui-state-error" );
-}
-});
-form = dialog.find( "form" ).on( "submit", function( event ) {
-event.preventDefault();
-addUser();
-});
-$( "#create-user" ).button().on( "click", function() {
-dialog.dialog( "open" );
-});
+    var dialog, form,
+    name = $("#nombreDepartamento"),
+    description = $("#descripcionDepartamento"),    
+    allFields = $( [] ).add( name ).add(description),
+    tips = $( "#mensaje" );
+
+    function updateTips( t ) {
+        tips.text( t ).addClass( "ui-state-highlight" );
+        setTimeout(function() {
+            tips.removeClass( "ui-state-highlight", 1500 );
+        }, 500 );
+    }
+    
+    function checkLength( o, n, min, max ) {
+        if ( o.val().length > max || o.val().length < min ) {
+            o.addClass( "ui-state-error" );
+            updateTips( "Tamaño de " + n + " debe estar entre  " + min + " y " + max + " caracteres." );
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+   
+    function addArea() {
+        var valid = true;
+        allFields.removeClass( "ui-state-error" );
+        valid = valid && checkLength( name, "nombre", 3, 16 );
+        valid = valid && checkLength( description, "descripcion", 6, 80 );
+        if ( valid ) {
+           $.ajax({
+                    type: "POST",
+                    url: "http://localhost/participacion_ciudadana/areas/registrarAjax",
+                    data: $("#formdata").serialize(),
+                    datatype: "text",
+                    beforeSend:function(){
+                        $('#mensaje').html('<b>El formulario se esta enviando</b>');
+                        
+                    },
+                    success:function(res){ 
+                        $("#mensaje").html(res);
+                        $('#formdata').each(function(){
+                            this.reset();   
+                        });
+                        dialog.dialog( "close" );
+                        location.reload();
+                        
+                    }
+                    
+            });
+            
+           return false;
+          
+        }
+        return valid;
+    }
+    
+    
+    dialog = $( "#dialog-form" ).dialog({
+                autoOpen: false,
+                resizable: false,
+                height: 430,
+                width: 250,
+                modal: true,
+                show: {
+                    effect: "blind",
+                    duration: 500
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 1000
+                },
+                icons: { primary: null, secondary: null },
+                buttons: {
+                    "Crear": addArea,
+                    Cancelar: function() {
+                        dialog.dialog( "close" );
+                    }
+                },
+                close: function() {
+                    form[ 0 ].reset();
+                    allFields.removeClass( "ui-state-error" );
+                }
+    });
+            
+    form = dialog.find( "form" ).on( "submit", function( event ) {
+        event.preventDefault();
+        addArea();
+    });
+    
+    $( "#create-user" ).button().on( "click", function() {
+        dialog.dialog( "open" );
+    });
+   
 });

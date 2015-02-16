@@ -12,7 +12,7 @@ class Usuario extends MY_Controller{
         $this->load->library('My_PHPMailer');
         $this->load->model('usuario_model');  
         $this->load->library('form_validation');
-        //$this->form_validation->set_error_delimiters("<div class='message error'><div ></div> <p class='ui-icon-alert'>","</p></div>");    
+        $this->form_validation->set_error_delimiters("<div class='message error'>","</div>");    
    
     }
     
@@ -146,38 +146,43 @@ class Usuario extends MY_Controller{
             log_message("INFO", "sesion validada");
             log_message("INFO",$this->input->post('email'));
             $usuario = new Usuario_model;
-            $usuario->datos($email);   
-            log_message("INFO",$this->db->last_query());
-            log_message("INFO", "datos usuario leidos");
-            $ultimoAcceso = $usuario->fechaUltimoAcceso();
-            $act = array(
-                'Email' => $email,
-                'NumeroIntentos' => 0,
-                'FechaUltimoAcceso' => date('Y/m/d H:i:s')
-            );
-            $usuario->actualizar($email, $act);
-            log_message("INFO", "datos usuario actualizados");
-            $datosUsuario = array(
-                'nombre'    => $usuario->nombre(),
-                'apellidos' => $usuario->apellido1() .' '. $usuario->apellido2(),
-                'email'     => $email,
-                'usuario'   => $usuario->permiso(),
-                'ultimoAcceso' => $ultimoAcceso,
-                'logged_in' => TRUE
-            );                
+            $usuario->datos($email);
+            if($usuario->validado()){
+                log_message("INFO",$this->db->last_query());
+                log_message("INFO", "datos usuario leidos");
+                $ultimoAcceso = $usuario->fechaUltimoAcceso();
+                $act = array(
+                    'Email' => $email,
+                    'NumeroIntentos' => 0,
+                    'FechaUltimoAcceso' => date('Y/m/d H:i:s')
+                );
+                $usuario->actualizar($email, $act);
+                log_message("INFO", "datos usuario actualizados");
+                $datosUsuario = array(
+                    'nombre'    => $usuario->nombre(),
+                    'apellidos' => $usuario->apellido1() .' '. $usuario->apellido2(),
+                    'email'     => $email,
+                    'usuario'   => $usuario->permiso(),
+                    'ultimoAcceso' => $ultimoAcceso,
+                    'logged_in' => TRUE
+                );                
 
-            $this->session->set_userdata($datosUsuario);
-            log_message("INFO", " SESION CREADA");
-            switch ($usuario->permiso()) {
-                case 'administrador':
-                        //header("Location:".base_url()."/administrador");
-                        redirect("administrador");
-                        break;
-                case 'ciudadano':
-                        //header("Location:".base_url()."/ciudadano");
-                        redirect("ciudadano");
-                        break;                             
-            }             
+                $this->session->set_userdata($datosUsuario);
+                log_message("INFO", " SESION CREADA");
+                switch ($usuario->permiso()) {
+                    case 'administrador':
+                            //header("Location:".base_url()."/administrador");
+                            redirect("administrador");
+                            break;
+                    case 'ciudadano':
+                            //header("Location:".base_url()."/ciudadano");
+                            redirect("ciudadano");
+                            break;                             
+                }
+            }
+            else{
+                $datos['mensaje'] = "Debes de validar tu email para poder acceder.";
+            }
         }
         $this->mostrar($datos);
         
@@ -333,7 +338,7 @@ class Usuario extends MY_Controller{
         $this->pagina = "password";
         $this->carpeta = "comun";
         
-        $datos['boton'] = array( 'name' => 'button', 'id' => 'boton_restablecer', 'value' => 'Enviar',"class"=>"ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5");     
+        $datos['boton'] = array( 'name' => 'button', 'id' => 'boton_restablecer', 'value' => 'Enviar',"class"=>"button");     
          
         $this->form_validation->set_rules('email', 'Email', 'trim|required|min_length[3]|valid_email|xss_clean');
         
@@ -385,7 +390,7 @@ class Usuario extends MY_Controller{
         }
         $this->mostrar($datos);
         
-        $this->mostrar($datos);
+        
     }
     
     

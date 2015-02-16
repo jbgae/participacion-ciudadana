@@ -81,6 +81,7 @@ class Incidente_model extends CI_Model{
         return $aux;
     }
     
+    
     public function idImagen($id = ""){
         $aux = "";        
         

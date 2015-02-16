@@ -8,6 +8,7 @@
 class Departamento_model extends CI_model{
 
     var $nombre;
+    var $descripcion;
     
     private static $db;
         
@@ -19,7 +20,8 @@ class Departamento_model extends CI_model{
     public function inicializar(){
         $aux = FALSE;
         
-        $this->nombre = $this->input->post("nombreDepartamento");
+        $this->nombre = mb_strtolower($this->input->post("nombreDepartamento"), "UTF-8");
+        $this->descripcion = $this->input->post("descripcionDepartamento");
         if($this->db->insert('departamento', $this)){
             $aux = TRUE;
         } 
@@ -32,6 +34,9 @@ class Departamento_model extends CI_model{
         
         $this->id = $id;
         $this->nombre = $incidencia[0]->nombre;
+        $this->descripcion = $incidencia[0]->descripcion;
+        
+        return $this;
     }
     
     public function eliminar($id){
@@ -53,5 +58,17 @@ class Departamento_model extends CI_model{
         }                
                 
         return $aux;
+    }
+    
+    static function departamentos(){
+        $query = self::$db->get('departamento');
+        
+        return $query->result();        
+    }
+    
+    static function numeroEmpleados($id){
+        self::$db->like('idDepartamento', $id);
+        self::$db->from('trabajador');
+        return self::$db->count_all_results();
     }
 }

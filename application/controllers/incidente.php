@@ -13,6 +13,7 @@ class Incidente extends MY_Controller{
         $this->load->model('incidente_model');
         $this->load->model('usuario_model');
         $this->load->model('imagen_model');
+        $this->load->model('departamento_model');
         $this->load->library('form_validation');
     }
     
@@ -54,6 +55,12 @@ class Incidente extends MY_Controller{
             'name'=>'button', 
             'value'=>'Registrar incidente'
         );
+        
+        $departamentos = Departamento_model::departamentos();
+        $datos['departamentos'] = array();
+        foreach($departamentos as $dep){
+            array_push($datos['departamentos'], $dep->nombre);
+        }
         
         if($this->_validar()){
             $codigoImagen = "";
@@ -104,8 +111,17 @@ class Incidente extends MY_Controller{
     
     public function historial(){
         $this->permisos('ciudadano');
+        $this->titulo = "Historial";
         $this->pagina = "historial";
         $this->carpeta = "ciudadano";
+        $this->estilo = array("//cdn.datatables.net/1.10.5/css/jquery.dataTables.min", 
+                              "//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui",
+                              "//cdn.datatables.net/plug-ins/f2c75b7247b/integration/jqueryui/dataTables.jqueryui",
+                              "formulario_modal");
+        $this->javascript = array("//cdn.datatables.net/1.10.5/js/jquery.dataTables.min",
+                                  "datatable",
+                                  "//code.jquery.com/ui/1.11.2/jquery-ui", 
+                                  "modal");
         
         $datos['incidentes'] = array();
         if($this->session->userdata('usuario') == "ciudadano"){
@@ -121,11 +137,10 @@ class Incidente extends MY_Controller{
         if(!empty($incidenteAux)){
             foreach($incidenteAux as $incidente){
                 $incidente->usuario = $usuario->nombre($incidente->emailUsuario).' '. $usuario->apellido1($incidente->emailUsuario). ' '.$usuario->apellido2($incidente->emailUsuario);
-                $incidente->estado = $incidenteAux1->estado($incidente->IdEstado);
-                
+                $incidente->estado = $incidenteAux1->estado($incidente->IdEstado);                
                 $incidente->rutaImagen = $imagen->ruta($incidente->IdImagen);
-                
-                $key =  date("d-m-Y", strtotime($incidente->fechaAlta));
+               
+                /*$key =  date("d-m-Y", strtotime($incidente->fechaAlta));
                 if(!isset($datos['incidentes'][$key])){
                     $datos['incidentes'][$key] = array();
                 }
@@ -135,10 +150,10 @@ class Incidente extends MY_Controller{
                     'usuario'       => $incidente->usuario,
                     'descripcion'   => $incidente->descripcion,
                     'estado'        => $incidente->estado
-                );
+                );*/
                 
                 
-                array_push($datos['incidentes'][$key], $incidente);
+                array_push($datos['incidentes'], $incidente);
                 
             }
         }
@@ -202,6 +217,7 @@ class Incidente extends MY_Controller{
     public function mapa(){
         
         $this->permisos('ciudadano');
+        $this->titulo = "Historial mapa";
         $this->pagina = "mapa";
         $this->carpeta = "ciudadano";
         $this->javascript = array("gmaps","mapa_incidentes");
@@ -235,6 +251,7 @@ class Incidente extends MY_Controller{
                     'title'=>$inc->fechaAlta,
                     'lat' =>$inc->latitud,
                     'lng' =>$inc->longitud,
+                    'est' =>$inc->IdEstado
                     //  'tipo'=>$inc->tipo
                 );
                 $i++;

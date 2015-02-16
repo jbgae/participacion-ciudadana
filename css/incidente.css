@@ -8,8 +8,6 @@ html,body{
     margin:0px;
 }
 
-
-
 #imagenDescripcion{
     margin: 8px 8px 8px 0px;
     float:left;
@@ -35,3 +33,20 @@ textarea#descripcion{
     float: left;
     margin-right: 3px;
 } 
+
+.reparado, .proceso, .rechazado{
+    color: #ffffff;
+    padding: 5px; 
+} 
+
+.reparado{
+    background-color: #009C0C;
+}
+
+.rechazado{
+    background-color: #E13300;
+}
+
+.proceso{
+    background-color: #F1C222;
+}

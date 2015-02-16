@@ -16,6 +16,12 @@ $(document).on('click', '.pan-to-marker', function(e) {
 });
 
 $(document).ready(function(){
+    
+    var marcadorR = "http://localhost/participacion_ciudadana/css/images/marcadorR.gif";
+    var marcadorV = "http://localhost/participacion_ciudadana/css/images/marcadorV.gif";
+    var marcadorAm = "http://localhost/participacion_ciudadana/css/images/marcadorAm.gif";
+    var marcadorAz = "http://localhost/participacion_ciudadana/css/images/marcadorAz.gif";
+    var image;
      
     map = new GMaps({
       div: '#mapa_incidentes',
@@ -59,12 +65,20 @@ $(document).ready(function(){
         if(data.length > 0){
             for(var i = 0; i < data.length; i++){
                 var item = data[i];
-                if (item.lat != undefined && item.lng != undefined) {
-                    
+                image = marcadorR;
+                
+                if(item.est === "1"){
+                    image = marcadorV;
+                }
+                else if(item.est === "2"){
+                    image = marcadorAm;
+                }
+                if (item.lat != undefined && item.lng != undefined) {                    
                     markers_data.push({
                         lat : item.lat,
                         lng : item.lng,
                         title : item.name,
+                        icon: image,
                         infoWindow: {
                             content:"<p>"+item.title+"</p>"}
                     });

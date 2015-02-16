@@ -24,6 +24,16 @@ div.message.error>p{
 .message.success, .message.error{
     color:white;
     text-shadow: none;
+    padding:5px;
+    margin-bottom: 8px;
+}
+
+.success{
+    background-color:#009C0C;
+}
+
+.error{
+    background-color:#d11;
 }
 
 div#mypanel>div>ul>li>a:visited,
@@ -49,21 +59,30 @@ div#main.panel.y-scroll>ul.list>li>a>p.ui-li-aside{
     margin-top:-80px;
 }
 
-html>body>div#afui>div#content>div#main>div#tabla>div#departamento_wrapper>div#departamento_length>label,
-html > body > div#afui > div#content.hasMenu.splitview > div#main.panel.y-scroll > div#tabla > div#departamento_wrapper.dataTables_wrapper.no-footer > div#departamento_filter.dataTables_filter > label{
+html>body>div#afui>div#content>div#main>div#tabla>div>div>label,
+html > body > div#afui > div#content.hasMenu.splitview > div#main.panel.y-scroll > div#tabla > div.dataTables_wrapper.no-footer > div.dataTables_filter > label{
     width:100%;
 }
 
-html>body>div#afui>div#content>div#main>div#tabla>div#departamento_wrapper>div#departamento_length>label>select{
+html>body>div#afui>div#content>div#main>div#tabla>div>div>label>select{
     padding:0px;
     height:30px;
     width:45px;
     //display:inline;
 }
 
-html>body>div#afui>div#content>div#main>div#tabla>div#departamento_wrapper.dataTables_wrapper.no-footer>div#departamento_filter.dataTables_filter>label>input{
+html>body>div#afui>div#content>div#main>div#tabla>div.dataTables_wrapper.no-footer>div.dataTables_filter>label>input{
     height:30px;
     padding:0px;
     padding-left:15px;
     
 }
+
+tbody>tr>td>img{
+    height:60px;
+}
+
+div#tabla > div.dataTables_wrapper.no-footer > table.display.dataTable.no-footer > tbody > tr > td > a{
+    text-decoration: none;
+}
+

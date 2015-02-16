@@ -71,10 +71,12 @@
                     <header>
                         <a id="backButton" class="button backButton">Volver</a>
                         <a id="menubadge" onclick='$.ui.toggleSideMenu()' class='menuButton' style="float:left !important"></a>
-                        <h1>Participación ciudadana</h1>
-                        <?php if($this->uri->segment(1)=="historial"):?>
-                            <a class="button icon magnifier" href="" style="float:right !important"></a>
+                        <?php if(isset($titulo)):?>
+                            <h1><?= $titulo;?></h1>
+                        <?php else:?>    
+                            <h1>Participación ciudadana</h1>
                         <?php endif;?>    
+                          
                     </header>
                     
                     

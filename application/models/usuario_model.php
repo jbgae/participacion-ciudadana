@@ -32,14 +32,14 @@ class Usuario_model extends CI_Model{
     //Por defecto inicializamos como ciudadano
     public function inicializar($privilegio = "2", $datos = ""){
         $aux = FALSE;
-        
+                
         if($datos == ""){
             $this->email = strtolower($this->input->post('email'));
-            $this->dni = strtolower($this->input->post('dni'));
-            $this->nombre = strtolower($this->input->post('nombre'));
-            $this->apellido1 = strtolower($this->input->post('apellido1'));
-            $this->apellido2 = strtolower($this->input->post('apellido2'));
-            $this->direccion = strtolower($this->input->post('direccion'));
+            $this->dni = $this->input->post('dni');
+            $this->nombre = mb_strtolower($this->input->post('nombre'), "UTF-8");
+            $this->apellido1 =  mb_strtolower($this->input->post('apellido1'), "UTF-8");
+            $this->apellido2 = mb_strtolower($this->input->post('apellido2'), "UTF-8");
+            $this->direccion = mb_strtolower($this->input->post('direccion'), "UTF-8");
             $this->telefono = $this->input->post('direccion');
             $this->validado = 0;
             $this->numeroIntentos = 0;

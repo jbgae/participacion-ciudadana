@@ -1,22 +1,5 @@
-<div id="dialog-form" title="Create new user">
-    <form>
-        <fieldset>
-            <label for="name">Name</label>
-            <input type="text" name="name" id="name" value="Jane Smith" class="text ui-widget-content ui-corner-all">
-        <label for="email">Email</label>
-        <input type="text" name="email" id="email" value="jane@smith.com" class="text ui-widget-content ui-corner-all">
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" value="xxxxxxx" class="text ui-widget-content ui-corner-all">
-        <!-- Allow form submission with keyboard without duplicating the dialog button -->
-        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-        </fieldset>
-    </form>
-</div>
-<button id="create-user">Crear nuevo departamento</button>
 
-
-
-
+<button id="create-user">Nuevo departamento</button>
 
 <div id="tabla">
     <table id="departamento" class="display" width="100%" cellspacing="0">
@@ -29,31 +12,41 @@
             </tr>
         </thead> 
         <tbody>
-            <tr>
-                <td>Jardinería</td>
-                <td>Prueba</td>
-                <td>20</td>
-                <td>Eliminar</td>
-            </tr>
-            <tr>
-                <td>Limpieza</td>
-                <td>Prueba2</td>
-                <td>30</td>
-                <td>Eliminar</td>
-            </tr>
-            <tr>
-                <td>Obras</td>
-                <td>Prueba3</td>
-                <td>12</td>
-                <td>Eliminar</td>
-            </tr>
-            <tr>
-                <td>Bomberos</td>
-                <td>Prueba4</td>
-                <td>21</td>
-                <td>Eliminar</td>
-            </tr>
-            
+            <?php if(isset($departamentos)):?>
+                <?php foreach($departamentos as $dep):?>
+                    <tr>
+                        <td><?= $dep->nombre;?></td>
+                        <td><?= $dep->descripcion;?></td>
+                        <td class="center"><?= $dep->numEmpleados;?></td>
+                        <td class="center">
+                         <a href ="#" class="icon trash open" id="<?= $dep->idDepartamento;?>">Eliminar </a>
+                        </td>
+                    </tr>
+                <?php endforeach;?>
+            <?php endif;?>
         </tbody>
     </table>
+    
 </div>
+
+<div id="dialog-form" title="Nuevo departamento">
+    <div id="mensaje">
+        <?php if(isset($mensaje)):?>
+            <?= $mensaje;?>
+        <?php endif;?>
+    </div> 
+    <form id = "formdata" accept-charset=”utf-8“>
+        <fieldset>
+            <input type="text" name="nombreDepartamento" id="nombreDepartamento" placeholder="Nombre" class="text ui-widget-content ui-corner-all">
+            <textarea  rows="4" cols="18" name="descripcionDepartamento" id="descripcionDepartamento" placeholder="Descripción" class="text ui-widget-content ui-corner-all"></textarea>
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+       
+</div>
+
+<div id="dialog-confirm" title="Eliminar incidencia">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Este departamento será eliminado. ¿Desea continuar?</p>
+</div>
+
