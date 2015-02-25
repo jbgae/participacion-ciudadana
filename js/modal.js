@@ -1,3 +1,7 @@
+/**
+ *
+ * @author jbgae_000
+ */
 $(document).ready(function(){
     
     $( "#dialog-confirm" ).dialog({

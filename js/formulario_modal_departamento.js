@@ -1,3 +1,7 @@
+/**
+ *
+ * @author jbgae_000
+ */
 $(function() {
     var dialog, form,
     name = $("#nombreDepartamento"),
@@ -31,7 +35,7 @@ $(function() {
         if ( valid ) {
            $.ajax({
                     type: "POST",
-                    url: "http://localhost/participacion_ciudadana/areas/registrarAjax",
+                    url: "http://localhost/participacion_ciudadana/departamentos/ajax",
                     data: $("#formdata").serialize(),
                     datatype: "text",
                     beforeSend:function(){
@@ -89,7 +93,7 @@ $(function() {
         addArea();
     });
     
-    $( "#create-user" ).button().on( "click", function() {
+    $( "#create-departamento" ).button().on( "click", function() {
         dialog.dialog( "open" );
     });
    

@@ -1,3 +1,7 @@
+/**
+ *
+ * @author jbgae_000
+ */
 window.addEventListener("DOMContentLoaded", function(){
    var canvas = document.getElementById("canvas");
    context = canvas.getContext("2d");

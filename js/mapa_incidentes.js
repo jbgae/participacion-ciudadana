@@ -1,3 +1,7 @@
+/**
+ *
+ * @author jbgae_000
+ */
 var map;
 
 $(document).on('click', '.pan-to-marker', function(e) {

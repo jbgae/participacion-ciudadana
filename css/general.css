@@ -3,6 +3,8 @@
     Author     : jbgae_000
 */
 
+a {  outline: none; }
+
 .ui-content{
     /*margin-top:2%;*/
     margin-left:2%;
@@ -86,3 +88,7 @@ div#tabla > div.dataTables_wrapper.no-footer > table.display.dataTable.no-footer
     text-decoration: none;
 }
 
+form#incidenteForm.form>label{
+    text-align: left;
+    font-weight: bold;
+}

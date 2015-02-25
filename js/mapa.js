@@ -1,3 +1,7 @@
+/**
+ *
+ * @author jbgae_000
+ */
 var map;
 $(document).ready(function(){ 
     

@@ -1,5 +1,5 @@
 
-<button id="create-user">Nuevo departamento</button>
+<button id="create-departamento" class="boton-modal">Nuevo departamento</button>
 
 <div id="tabla">
     <table id="departamento" class="display" width="100%" cellspacing="0">

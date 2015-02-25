@@ -40,7 +40,7 @@ class Usuario_model extends CI_Model{
             $this->apellido1 =  mb_strtolower($this->input->post('apellido1'), "UTF-8");
             $this->apellido2 = mb_strtolower($this->input->post('apellido2'), "UTF-8");
             $this->direccion = mb_strtolower($this->input->post('direccion'), "UTF-8");
-            $this->telefono = $this->input->post('direccion');
+            $this->telefono = $this->input->post('telefono');
             $this->validado = 0;
             $this->numeroIntentos = 0;
             $this->fechaUltimoIntento = date('Y/m/d h:i:s');

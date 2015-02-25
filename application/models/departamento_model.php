@@ -71,4 +71,32 @@ class Departamento_model extends CI_model{
         self::$db->from('trabajador');
         return self::$db->count_all_results();
     }
+    
+    static function empleados($departamento){
+       
+        $emailEmpleados = array();        
+        $empleadoAux = array();
+        $result = array();
+                
+        foreach($departamento as $key=>$dep){
+            if($dep != ''){
+                 self::$db->select("emailTrabajador");
+                self::$db->where('idDepartamento', $key+1);
+                self::$db->from("trabajador");
+                $query = self::$db->get();
+                $empleados = $query->result();
+                if($query->num_rows() > 0){
+                    self::$db->select('nombre, apellido1, apellido2');
+                    self::$db->where('email', $empleados[0]->emailTrabajador);
+                    self::$db->from("usuario");
+                    $query2 = self::$db->get();
+                    $empleadoAux = $query2->result();
+                    $result[$empleados[0]->emailTrabajador] = $empleadoAux[0]->nombre. " ". $empleadoAux[0]->apellido1. " ".$empleadoAux[0]->apellido2;
+
+                }
+            }
+        }
+        
+        return $result;
+    }
 }

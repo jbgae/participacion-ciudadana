@@ -14,6 +14,7 @@ class Incidente extends MY_Controller{
         $this->load->model('usuario_model');
         $this->load->model('imagen_model');
         $this->load->model('departamento_model');
+        $this->load->model('area_model');
         $this->load->library('form_validation');
     }
     
@@ -46,7 +47,8 @@ class Incidente extends MY_Controller{
     public function registrar(){
         $this->permisos('ciudadano');
         $this->pagina = "incidente";
-        $this->javascript = array("camara","incidente", "gmaps","mapa");
+        $this->javascript = array("jquery.multi-select","select","camara","incidente", "gmaps","mapa");
+        $this->estilo = array("select");
         $this->carpeta = "ciudadano";
         
         $datos['boton'] = array(            
@@ -56,11 +58,19 @@ class Incidente extends MY_Controller{
             'value'=>'Registrar incidente'
         );
         
+        $areas = Area_model::areas();
+        $datos['areas'] = array("0"=>"-- Seleccione el área --");
+        foreach($areas as $area){
+            array_push($datos['areas'], $area->nombre);
+        }
+        
         $departamentos = Departamento_model::departamentos();
         $datos['departamentos'] = array();
         foreach($departamentos as $dep){
             array_push($datos['departamentos'], $dep->nombre);
         }
+        
+        $datos['empleados'] = array();
         
         if($this->_validar()){
             $codigoImagen = "";
