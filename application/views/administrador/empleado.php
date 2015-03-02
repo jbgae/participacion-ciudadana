@@ -21,7 +21,7 @@
                         <td class="center"><?= $emp->telefono;?></td>
                         <td> <?= $emp->departamento;?></td>
                         <td class="center">
-                         <a href ="#" class="icon trash open" id="<?= $emp->email;?>">Eliminar </a>
+                            <a href ="#" class="icon trash open" id="<?= urlencode($emp->email);?>">Eliminar </a>
                         </td>
                     </tr>
                 <?php endforeach;?>

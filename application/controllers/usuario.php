@@ -174,6 +174,9 @@ class Usuario extends MY_Controller{
                             //header("Location:".base_url()."/administrador");
                             redirect("administrador");
                             break;
+                    case 'empleado':
+                            redirect("empleado");
+                            break;
                     case 'ciudadano':
                             //header("Location:".base_url()."/ciudadano");
                             redirect("ciudadano");

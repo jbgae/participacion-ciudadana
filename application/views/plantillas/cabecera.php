@@ -4,6 +4,10 @@
         <title>Participacion Ciudadana</title>
 	<meta name="description" content="">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!--ESTILOS-->
+        <!--[if lt IE 9]>
+            <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
+        <![endif]-->
                 
         <script src="//cdn.app-framework-software.intel.com/2.1/appframework.min.js" type="text/javascript"></script>        
         <link rel="stylesheet" type="text/css" href="http://cdn.app-framework-software.intel.com/2.1/af.ui.css" />

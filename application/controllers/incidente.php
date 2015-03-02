@@ -137,6 +137,9 @@ class Incidente extends MY_Controller{
         if($this->session->userdata('usuario') == "ciudadano"){
             $incidenteAux = Incidente_model::incidentes($this->session->userdata('email'));           
         }
+        elseif($this->session->userdata('usuario') == "empleado"){
+            $incidenteAux = Incidente_model::incidentesTrabajador($this->session->userdata('email'));
+        }
         elseif($this->session->userdata('usuario') == "administrador"){
             $incidenteAux = Incidente_model::incidentes();
         }

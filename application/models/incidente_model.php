@@ -43,7 +43,7 @@ class Incidente_model extends CI_Model{
     }
     
     public function registrar($idImagen = null){
-        $aux = FALSE;
+        $aux = FALSE;        
         
         $this->descripcion = $this->input->post("descripcion1");
         if($this->input->post("direccion1") == ""){
@@ -59,7 +59,20 @@ class Incidente_model extends CI_Model{
         $this->IdEstado = "2";
         if($this->db->insert('incidencia', $this)){
             $aux = TRUE;
-        } 
+            $codigo = $this->db->insert_id();
+            
+            /**********************/
+            $this->db->set('idIncidencia', $codigo);
+            $this->db->set('idArea', $this->input->post('areas'));
+            if($this->db->insert('incidencia-area')){
+                $aux = TRUE;
+            }
+            /**********************/
+            /* PONER DEPARTAMENTOS */
+            /* PONER EMPLEADOS */
+        }
+        
+        
         
         return $aux;
     }
@@ -117,6 +130,15 @@ class Incidente_model extends CI_Model{
         return $incidentes;
     }
     
+    static function incidentesTrabajador($email){
+        self::$db->where('emailTrabajador', $email);
+        $query = self::$db->get("trabajador-reparacion");
+        $incidentes = $query->result();
+        
+        return $incidentes;
+    }
+
+
     static function existe($id){
         $aux = FALSE;
         

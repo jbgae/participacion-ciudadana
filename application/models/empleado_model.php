@@ -59,6 +59,25 @@ class Empleado_model extends Usuario_model{
         return $query->result();        
     }
     
-    
+    public function eliminar($email = ''){
+        $aux = FALSE;
+        
+        if($email != ''){
+            if($this->existe($email)){
+                if($this->db->delete('usuario', array('email' => $email))){
+                    $aux = TRUE;
+                }
+            }
+        }
+        else{ 
+            if($this->existe($this->Email)){ 
+                if($this->db->delete('usuario', array('email' => $this->email))){
+                    $aux = TRUE;
+                }
+            }
+        }                
+                
+        return $aux;
+    }
     
 }

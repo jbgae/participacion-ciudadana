@@ -1,6 +1,6 @@
             <nav>
                 <ul class="list">
-                    <?php if($this->session->userdata("usuario")!= 'ciudadano' && $this->session->userdata('usuario')!= 'administrador'):?>
+                    <?php if($this->session->userdata("usuario")!= 'ciudadano' && $this->session->userdata('usuario')!= 'administrador' && $this->session->userdata('usuario')!= 'empleado'):?>
                         <?php if ($this->uri->segment(1)=="login"):?>           
                             <li class="divider">Menu</li>
 
@@ -27,6 +27,12 @@
                         <li><?= anchor('historial', "Historial", array("class"=>"icon graph"));?></li>
                         <li><?= anchor('cerrar', "Salir", array("class"=>"icon close"));?></li>
 
+                    <?php elseif($this->session->userdata("usuario")== 'empleado'):?>  
+                        <li class="divider">Menu</li>
+                        
+                        <li><?= anchor('empleado\historial', "Historial", array("class"=>"icon graph"));?></li>
+                        <li><?= anchor('cerrar', "Salir", array("class"=>"icon close"));?></li>
+                        
                     <?php elseif($this->session->userdata("usuario")== 'administrador'):?>
                         <li class="divider">Menu</li>
 

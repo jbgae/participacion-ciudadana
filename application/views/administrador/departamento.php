@@ -19,7 +19,7 @@
                         <td><?= $dep->descripcion;?></td>
                         <td class="center"><?= $dep->numEmpleados;?></td>
                         <td class="center">
-                         <a href ="#" class="icon trash open" id="<?= $dep->idDepartamento;?>">Eliminar </a>
+                         <a href ="<?= base_url()."/eliminar/departamento/$dep->idDepartamento"?>" class="icon trash open" id="<?= $dep->idDepartamento;?>">Eliminar </a>
                         </td>
                     </tr>
                 <?php endforeach;?>
@@ -46,7 +46,7 @@
        
 </div>
 
-<div id="dialog-confirm" title="Eliminar incidencia">
+<div id="dialog-confirm" title="Eliminar departamento">
     <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Este departamento será eliminado. ¿Desea continuar?</p>
 </div>
 

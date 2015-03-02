@@ -109,4 +109,9 @@ class Departamento extends MY_Controller{
         
     }
     
+    public function departamentosAjax(){
+        $departamentos = Departamento_model::departamentos();
+        echo json_encode($departamentos);
+    }
+    
 }

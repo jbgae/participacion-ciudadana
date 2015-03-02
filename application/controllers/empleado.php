@@ -109,4 +109,18 @@ class Empleado extends MY_Controller {
             echo validation_errors();
         }
     }
+    
+    
+    /*MIRAR*/
+    public function eliminar($email){
+        if($email != ''){ 
+            $email  = urldecode($email); 
+            if(Empleado_model::existe($email)){
+                $empleado = new Empleado_model;
+                $empleado->datos($email);                
+                $empleado->eliminar();
+            }
+        }
+        $this->registrar();
+    }
 }
