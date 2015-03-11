@@ -14,6 +14,12 @@
         <link rel="stylesheet" type="text/css" href="http://cdn.app-framework-software.intel.com/2.1/icons.css" />
         <script type="text/javascript" charset="utf-8" src="http://cdn.app-framework-software.intel.com/2.1/appframework.ui.min.js"></script>    
         
+        
+        <!--<script src="<? base_url();?>appframework/appframework.min.js" type="text/javascript"></script>        
+        <link rel="stylesheet" type="text/css" href="<? base_url();?>appframework/build/css/af.ui.css" >
+        <link rel="stylesheet" type="text/css" href="<? base_url();?>appframework/build/css/icons.css" >
+        <script src="<? base_url();?>appframework/ui/appframework.ui.js" type="text/javascript"></script>-->
+        
         <script>
             $.ui.useInternalRouting = false;
             //$.ui.useOSThemes = true; 
@@ -31,13 +37,15 @@
                     <script src="<?= base_url();?>js/<?= $javascript;?>.js" type="text/javascript"></script>
                 <?php endif;?>    
             <?php else:?>
-                <?php foreach($javascript as $js):?>
-                    <?php if($js[0] === "/"):?>
-                        <script src="<?= $js;?>.js" type="text/javascript"></script>
-                    <?php else:?>
-                        <script src="<?= base_url();?>js/<?= $js;?>.js" type="text/javascript"></script>
-                    <?php endif;?>    
-                <?php endforeach;?>
+                <?php if(is_array($javascript)):?>    
+                    <?php foreach($javascript as $js):?>
+                        <?php if($js[0] === "/"):?>
+                            <script src="<?= $js;?>.js" type="text/javascript"></script>
+                        <?php else:?>
+                            <script src="<?= base_url();?>js/<?= $js;?>.js" type="text/javascript"></script>
+                        <?php endif;?>    
+                    <?php endforeach;?>
+                <?php endif;?>        
             <?php endif;?>        
         <?php endif;?>
 
@@ -54,13 +62,15 @@
                     <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/<?= $estilo;?>.css">
                 <?php endif;?>    
             <?php else:?>
-                <?php foreach($estilo as $css):?>
-                    <?php if($css[0] === "/"):?>
-                        <link rel="stylesheet" type="text/css" href="<?= $css;?>.css">
-                    <?php else:?>
-                        <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/<?= $css;?>.css">
-                    <?php endif;?>    
-                <?php endforeach;?>
+                <?php if(is_array($estilo)):?>    
+                    <?php foreach($estilo as $css):?>                    
+                        <?php if($css[0] === "/"):?>
+                            <link rel="stylesheet" type="text/css" href="<?= $css;?>.css">
+                        <?php else:?>
+                            <link rel="stylesheet" type="text/css" href="<?= base_url();?>css/<?= $css;?>.css">
+                        <?php endif;?>    
+                    <?php endforeach;?>
+                <?php endif;?>        
             <?php endif;?>        
         <?php endif;?>
         

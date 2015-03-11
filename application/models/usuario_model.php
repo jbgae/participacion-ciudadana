@@ -47,7 +47,7 @@ class Usuario_model extends CI_Model{
             $this->password = md5($this->input->post('password'));
             $this->IdPrivilegio = $privilegio;
             
-            if($this->db->insert('Usuario', $this)){
+            if($this->db->insert('usuario', $this)){
                 $aux = TRUE;
             } 
         }

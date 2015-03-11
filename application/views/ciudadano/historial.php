@@ -38,7 +38,11 @@
                             <?php endif;?>    
                         </td>
                         <td class="center">
-                            <?= anchor("ver/incidente/".$incidente->Id,"Editar", array("class"=>"icon tools"));?><br>
+                            <?php if($this->session->userdata('usuario') == "ciudadano"):?>
+                                <?= anchor("ver/incidente/".$incidente->Id,"Editar", array("class"=>"icon tools"));?><br>
+                            <?php else:?>
+                                <?= anchor("incidente/modificar/".$incidente->Id,"Editar", array("class"=>"icon tools"));?><br>
+                            <?php endif;?>    
                             <!-- anchor("#","Eliminar", array("class"=>"icon trash open"));?>-->
                             <a href ="#" class="icon trash open" id="<?= $incidente->Id;?>">Eliminar </a>
                         </td>

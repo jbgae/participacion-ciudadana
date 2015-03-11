@@ -18,7 +18,7 @@ class Area_model extends CI_Model{
     }
     
     static function areas(){
-        
+        self::$db->select("id,nombre");
         $query = self::$db->get('area');        
         $areas = $query->result(); 
         

@@ -10,10 +10,7 @@ $(document).ready(function(){
         $("#my-select :selected").each(function() {      
             selected[$(this).val()]=$(this).text();
         });     
-        $.post("http://localhost/participacion_ciudadana/departamento/ajax", {
-           departamentos : selected
-        }, 
-        function(data) {
+        $.post("http://localhost/participacion_ciudadana/departamento/ajax",{departamentos: selected}, function(data){
             res = JSON.parse(data);
             
             for(var key in res){

@@ -15,6 +15,11 @@ class Area extends MY_Controller {
     
     public function areaAjax(){
         $areas = Area_model::areas();
+        foreach($areas as $area){
+            echo $area->nombre. ' '. $area->id;
+            echo '<br>';
+        }
+       
         echo json_encode($areas);
     }
 }

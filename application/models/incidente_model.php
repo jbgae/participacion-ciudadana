@@ -9,7 +9,6 @@ class Incidente_model extends CI_Model{
     
     var $fechaAlta;
     var $descripcion;
-    var $direccion;
     var $latitud;
     var $longitud;
     var $IdImagen;
@@ -32,7 +31,7 @@ class Incidente_model extends CI_Model{
         $this->id = $id;
         $this->fechaAlta = $incidencia[0]->fechaAlta;
         $this->descripcion = $incidencia[0]->descripcion;
-        $this->direccion = $incidencia[0]->direccion;
+        //$this->direccion = $incidencia[0]->direccion;
         $this->latitud = $incidencia[0]->latitud;
         $this->longitud = $incidencia[0]->longitud;
         $this->IdImagen = $incidencia[0]->IdImagen;
@@ -43,38 +42,132 @@ class Incidente_model extends CI_Model{
     }
     
     public function registrar($idImagen = null){
-        $aux = FALSE;        
+        $aux = FALSE;  
+        
+        if($idImagen == ""){
+            $idImagen = null;
+        }
         
         $this->descripcion = $this->input->post("descripcion1");
-        if($this->input->post("direccion1") == ""){
-            $this->direccion = null;
-        }
-        else{
-            $this->direccion = $this->input->post("direccion1");
-        }
         $this->latitud = $this->input->post("latitude");
         $this->longitud = $this->input->post("longitude");
-        $this->emailUsuario = $this->session->userdata("email");
+        
+        /*SUBIR*/
+        if($this->input->post("email")!= ""){
+            $this->emailUsuario = $this->input->post("email");
+        }
+        else{
+            $this->emailUsuario = $this->session->userdata("email");
+        }
         $this->IdImagen = $idImagen;
         $this->IdEstado = "2";
         if($this->db->insert('incidencia', $this)){
             $aux = TRUE;
-            $codigo = $this->db->insert_id();
-            
+            $codigo = $this->db->insert_id();            
             /**********************/
             $this->db->set('idIncidencia', $codigo);
             $this->db->set('idArea', $this->input->post('areas'));
             if($this->db->insert('incidencia-area')){
                 $aux = TRUE;
+                /**********************/
+                $deps = $this->input->post("departamentos");
+                if(!is_array($deps)){
+                    $this->db->set('idIncidencia', $codigo);
+                    $this->db->set('idDepartamento', $deps); 
+                    if($this->db->insert('incidencia-departamento')){
+                        $aux = TRUE;
+                    }
+                    else{
+                        $aux = FALSE;
+                    }
+                    $emps = $this->input->post("empleados");
+                    if(!is_array($emps)){
+                        $this->db->set('idIncidencia', $codigo);
+                        $this->db->set('emailTrabajador', $emps);
+                        if($this->db->insert('incidencia-trabajador')){
+                            $aux = TRUE;
+                        }
+                        else{
+                            $aux = FALSE;
+                        }                        
+                    }
+                    else{
+                        foreach($emps as $empl){                            
+                            $this->db->set('idIncidencia', $codigo);
+                            $this->db->set('emailTrabajador', $empl);
+                            if($this->db->insert('incidencia-trabajador')){
+                                $aux = TRUE;
+                            }
+                            else{
+                                $aux = FALSE;
+                            }
+                        }
+                    }
+                }
+                else{
+                    foreach($deps as $departamento){
+                        $this->db->set('idIncidencia', $codigo);
+                        $this->db->set('idDepartamento', $departamento);
+                        if($this->db->insert('incidencia-departamento')){
+                            $aux = TRUE;
+                            /***********************/
+                            $emps = $this->input->post("empleados");
+                            if(!is_array($emps)){
+                                $this->db->set('idIncidencia', $codigo);
+                                $this->db->set('emailTrabajador', $emps);
+                                if($this->db->insert('incidencia-trabajador')){
+                                    $aux = TRUE;
+                                }
+                                else{
+                                    $aux = FALSE;
+                                }                        
+                            }
+                            else{
+                                foreach($emps as $empl){                            
+                                    $this->db->set('idIncidencia', $codigo);
+                                    $this->db->set('emailTrabajador', $empl);
+                                    if($this->db->insert('incidencia-trabajador')){
+                                        $aux = TRUE;
+                                    }
+                                    else{
+                                        $aux = FALSE;
+                                    }
+                                }
+                            }
+                        }
+                        else{
+                            $aux = FALSE;
+                        }
+                    }
+                }
             }
-            /**********************/
-            /* PONER DEPARTAMENTOS */
-            /* PONER EMPLEADOS */
+            else{
+                $aux = FALSE;
+            }
+        }
+        else{
+            $aux = FALSE;
         }
         
-        
-        
         return $aux;
+    }
+    
+    public function registrarAjax($codigoImagen = ""){
+        $this->descripcion = $this->input->post("descripcion1");
+        $this->latitud = $this->input->post("latitude");
+        $this->longitud = $this->input->post("longitude");
+        $this->emailUsuario = $this->session->userdata("email");
+        $this->direccion = null;
+        $this->IdEstado = "2";
+        if($codigoImagen == ""){
+            $this->IdImagen = null;
+        }
+        else{
+            $this->IdImagen = $codigoImagen;
+        }
+        if($this->db->insert('incidencia', $this)){
+            $aux = TRUE;
+        }
     }
     
     public function estado($id = ""){
@@ -132,7 +225,7 @@ class Incidente_model extends CI_Model{
     
     static function incidentesTrabajador($email){
         self::$db->where('emailTrabajador', $email);
-        $query = self::$db->get("trabajador-reparacion");
+        $query = self::$db->get("incidencia-trabajador");
         $incidentes = $query->result();
         
         return $incidentes;
@@ -141,7 +234,7 @@ class Incidente_model extends CI_Model{
 
     static function existe($id){
         $aux = FALSE;
-        
+        log_message("INFO", "PRUEBA--------------".$id);
         if($id != ''){
             $query = self::$db->get_where("incidencia", array('Id'=>$id));
 

@@ -1,6 +1,8 @@
 <!-- MAPA-->
 <div id="geolocation_map"></div><br>
-
+ <?php if (isset($mensaje)):?>
+        <div id="message success"><?= $mensaje;?></div>
+    <?php endif;?>  
 <!--FORMULARIO-->
 <div class="formGroupHead"></div>
 <?= form_open_multipart('incidente/registrar',array('class'=>'form', 'id'=>'incidenteForm'));?>
@@ -35,11 +37,9 @@
     <br>
 
 
-    <div id="details"><?= validation_errors();?></div>
+    <div id="message error"><?= validation_errors();?></div>
     
-    <?php if (isset($mensaje)):?>
-        <div id="progress"><?= $mensaje;?></div>
-    <?php endif;?>    
+     
 <?= form_close();?>
  
 

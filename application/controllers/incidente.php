@@ -19,17 +19,9 @@ class Incidente extends MY_Controller{
     }
     
     private function _validar(){
-        
-        $checked = (isset($_POST['chck-position']))? true:false;
-        
-        if($checked){
-            $this->form_validation->set_rules('latitude', 'Latitud', 'trim|xss_clean');        
-            $this->form_validation->set_rules('longitude', 'Longitud', 'trim|xss_clean');  
-        }
-        else{
-            $this->form_validation->set_rules('direccion1', 'Dirección', 'trim|required|min_length[3]|xss_clean');
-        }
-             
+          
+        $this->form_validation->set_rules('latitude', 'Latitud', 'trim|xss_clean');        
+        $this->form_validation->set_rules('longitude', 'Longitud', 'trim|xss_clean');               
         $this->form_validation->set_rules('descripcion1', 'Longitud', 'trim|required|xss_clean');        
 
         /*if (empty($_FILES['fileToUpload']['name'])){
@@ -47,7 +39,7 @@ class Incidente extends MY_Controller{
     public function registrar(){
         $this->permisos('ciudadano');
         $this->pagina = "incidente";
-        $this->javascript = array("jquery.multi-select","select","camara","incidente", "gmaps","mapa");
+        $this->javascript = array("jquery.multi-select","select","incidente", "gmaps","mapa");
         $this->estilo = array("select");
         $this->carpeta = "ciudadano";
         
@@ -97,10 +89,40 @@ class Incidente extends MY_Controller{
     }
     
     public function registrarAjax(){
-        
+        $codigoImagen = "";
+        foreach($_POST as $key => $value){
+            log_message("INFO", "key--->".$key);
+            log_message("INFO", "value--->".$value);
+        }
+        if($this->input->post("fileToUpload") != ""){
+            $imagen = new Imagen_model;
+            $imagen->inicializar();
+            $codigoImagen = $imagen->codigo();
+        }
+        $incidente = new Incidente_model;
+        if($incidente->registrarAjax($codigoImagen)){
+            $mensaje = "El incidente se ha registrado con éxito";
+            echo '<div class="text-success">'.$mensaje.'</div>';
+        }
+        else{
+            $error = 'No se ha podido registrar el incidente en este momento';
+            echo '<div class="text-error">'.$error.'</div>';
+        }
+        /*foreach($_POST as $key => $value){
+            log_message("INFO", "key--->".$key);
+            log_message("INFO", "value--->".$value);
+        }
         if($this->_validar()){
+            $codigoImagen = "";
+            if (!empty($_FILES['fileToUpload']['name'])){
+                $imagen = new Imagen_model;
+                $imagen->inicializar();
+                $codigoImagen = $imagen->codigo();
+                log_message("info","Codigo de imagen: $codigoImagen");
+            }
             $incidente = new Incidente_model;
-            if($incidente->registrar()){
+            
+            if($incidente->registrar($codigoImagen)){
                 $mensaje = "El incidente se ha registrado con éxito";
                 echo '<div class="text-success">'.$mensaje.'</div>';
             }
@@ -116,8 +138,10 @@ class Incidente extends MY_Controller{
             $error = str_replace('<\/p>\n', "", $error);
             
             echo '<div class="text-error">'.$error.'</div>';
-        }
+        }*/
     } 
+    
+   
     
     public function historial(){
         $this->permisos('ciudadano');
@@ -175,6 +199,7 @@ class Incidente extends MY_Controller{
         $this->mostrar($datos);
     }
     
+    
     public function historialAjax($email, $user){
         /*if(!$this->input->is_ajax_request()){
             redirect('404');
@@ -185,6 +210,9 @@ class Incidente extends MY_Controller{
                 $incidenteAux = Incidente_model::incidentes($email);           
             }
             elseif($user == "administrador"){
+                $incidenteAux = Incidente_model::incidentes();
+            }
+            else{
                 $incidenteAux = Incidente_model::incidentes();
             }
             $usuario = new Usuario_model;
@@ -225,6 +253,27 @@ class Incidente extends MY_Controller{
         
        // }
         
+    }
+    
+    public function historialMapaAjax($email = "", $user=""){
+        $incidentes = array();
+        if($user == "ciudadano"){
+            $incidenteAux = Incidente_model::incidentes($email);           
+        }
+        else{
+            $incidenteAux = Incidente_model::incidentes();
+        }
+        
+        $usuario = new Usuario_model;
+        $incidenteAux1 = new Incidente_model;
+        if(!empty($incidenteAux)){
+            foreach($incidenteAux as $incidente){
+                $incidente->usuario = $usuario->nombre($incidente->emailUsuario).' '. $usuario->apellido1($incidente->emailUsuario). ' '.$usuario->apellido2($incidente->emailUsuario);
+                $incidente->estado = $incidenteAux1->estado($incidente->IdEstado);
+                array_push($incidentes, $incidente);
+            }
+        }
+        echo json_encode($incidentes);
     }
   
     public function mapa(){
@@ -316,21 +365,38 @@ class Incidente extends MY_Controller{
             redirect('404');
         }
         else{*/
-            if(Incidente_model::existe($id)){
-                $incidente = new Incidente_model;
-                $usuario = new Usuario_model;
-                $incidente->datos($id);
-                $incidente->usuario = $usuario->nombre($incidente->emailUsuario).' '. $usuario->apellido1($incidente->emailUsuario). ' '.$usuario->apellido2($incidente->emailUsuario);
-                $incidente->estado = $incidente->estado($incidente->IdEstado);
+        log_message("INFO", "Incidente--->".$id);
+        if(Incidente_model::existe($id)){
+            $incidente = new Incidente_model;
+            $usuario = new Usuario_model;
+            $incidente->datos($id);
+            $incidente->usuario = $usuario->nombre($incidente->emailUsuario).' '. $usuario->apellido1($incidente->emailUsuario). ' '.$usuario->apellido2($incidente->emailUsuario);
+            $incidente->estado = $incidente->estado($incidente->IdEstado);
 
-                echo json_encode($incidente);
+            echo json_encode($incidente);
 
-            }
-            else{
-                echo "El incidente indicado no existe actualmente";
-            } 
+        }
+        else{
+            echo "El incidente indicado no existe actualmente";
+        } 
         //}
         
+    }
+    
+    public function modificar($id ){
+        $this->permisos("administrador");
+        $this->pagina = "modificar_incidente";
+        $this->estilo = array("mapa");
+        $this->javascript = array("gmaps","jquery.multi-select","select","incidente","mapaIncidente");
+        $this->carpeta = "administrador";
+        
+        $incidente = new Incidente_model;
+        $aux = $incidente->datos($id);
+        $datos['options'] = array("0"=>"- - Elige estado - -","1"=>"Reparado","2"=>"Proceso","3"=>"Rechazado");
+        $datos['estado'] = $incidente->estado($incidente->IdEstado);
+        $datos['incidencia'] = $aux;
+        
+        $this->mostrar($datos);
     }
 }
 

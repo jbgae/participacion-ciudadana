@@ -228,7 +228,7 @@ class Usuario extends MY_Controller{
 
                 //$this->session->set_userdata($datosUsuario);
                 log_message("INFO", " SESION CREADA");
-                echo $datosUsuario;
+                echo json_encode($datosUsuario);
             }
        // }
     }

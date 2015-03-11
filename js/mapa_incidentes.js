@@ -65,29 +65,29 @@ $(document).ready(function(){
         }
     });
 
+    
 
-
-    $.post("http://emplea.zz.mu/participacion_ciudadana/incidente/cargar",{ }, function(data){
+    $.post("http://localhost/participacion_ciudadana/incidente/historialMapaAjax",{ }, function(res){
         markers_data = [];
-        if(data.length > 0){
-            for(var i = 0; i < data.length; i++){
-                var item = data[i];
+        if(res.length > 0){
+            for(var i = 0; i < res.length; i++){
+                var item = res[i];
                 image = marcadorR;
 
-                if(item.est === "1"){
+                if(item.IdEstado === "1"){
                     image = marcadorV;
                 }
-                else if(item.est === "2"){
+                else if(item.IdEstado === "2"){
                     image = marcadorAm;
                 }
-                if (item.lat != undefined && item.lng != undefined) {
+                if (item.latitud != undefined && item.longitud != undefined) {
                     markers_data.push({
-                        lat : item.lat,
-                        lng : item.lng,
-                        title : item.name,
+                        lat : item.latitud,
+                        lng : item.longitud,
+                        title : item.descripcion,
                         icon: image,
                         infoWindow: {
-                            content:"<p>"+item.title+"</p>"
+                            content:"<p>"+item.descripcion+"</p>"
                         }
                     });
                 }

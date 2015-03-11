@@ -99,12 +99,6 @@ class Departamento extends MY_Controller{
             }
             $empleados = Departamento_model::empleados($departamentosAux);
             echo json_encode($empleados);
-            
-            /*foreach($empleados as $k =>$empl){
-                ?>
-                    <option value="<?=$k;?>"><?=$empl;?></option>
-                <?php
-            }*/
         }
         
     }
