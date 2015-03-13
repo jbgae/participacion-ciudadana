@@ -398,5 +398,10 @@ class Incidente extends MY_Controller{
         
         $this->mostrar($datos);
     }
+    
+    public function subirImagen(){
+        set_time_limit(0);
+        move_uploaded_file($_FILES["FileData"]["tmp_name"], base_url()."../imagenes/".$_FILES["FileData"]["name"]);
+    }
 }
 

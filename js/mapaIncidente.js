@@ -46,6 +46,7 @@ $(document).ready(function(){
                     }
                 });
                 map.addMarkers(markers_data);
+                map.setCenter(item.latitud, item.longitud);
             }
             
         }
