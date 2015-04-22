@@ -21,6 +21,7 @@ $(document).ready(function() {
         //"scrollX": true
     } );
     $('#historial').dataTable( {
+        "order": [[ 0, "desc" ]],
         "language": {
             "lengthMenu": "Mostrando _MENU_ registros por página.",
             "zeroRecords": "No existe ningún incidente registrado.",

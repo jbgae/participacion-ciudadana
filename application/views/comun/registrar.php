@@ -12,6 +12,9 @@
         <input type="email" name="email" id="email" value="" placeholder="Email">
         <?= form_error('email'); ?>
         
+        <input type="text" name="dni" id="dni" value="" placeholder="DNI">
+        <?= form_error('dni'); ?>
+        
         <input type="text" name="direccion" id="direccion" value="" placeholder="Dirección">
         <?= form_error('direccion'); ?>
         

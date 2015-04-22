@@ -2,7 +2,7 @@
  *
  * @author jbgae_000
  */
-$(function() {
+$(function() { 
     var dialog, form,
     name = $("#nombreEmpleado"),
     surname1 = $("#apellido1Empleado"),

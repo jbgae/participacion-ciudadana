@@ -24,22 +24,23 @@
                         <li class="divider">Menu</li>
 
                         <li><?= anchor('incidente', "Registrar incidente", array("class"=>"icon location"));?></li>
-                        <li><?= anchor('historial', "Historial", array("class"=>"icon graph"));?></li>
+                        <li id="historial"><?= anchor('historial', "Historial", array("class"=>"icon graph"));?></li>
                         <li><?= anchor('cerrar', "Salir", array("class"=>"icon close"));?></li>
 
                     <?php elseif($this->session->userdata("usuario")== 'empleado'):?>  
                         <li class="divider">Menu</li>
                         
-                        <li><?= anchor('empleado\historial', "Historial", array("class"=>"icon graph"));?></li>
+                        <li><?= anchor('empleado', "Historial", array("class"=>"icon graph"));?></li>
                         <li><?= anchor('cerrar', "Salir", array("class"=>"icon close"));?></li>
                         
                     <?php elseif($this->session->userdata("usuario")== 'administrador'):?>
                         <li class="divider">Menu</li>
 
                         <li><?= anchor('incidente', "Registrar incidente", array("class"=>"icon location"));?></li>
-                        <li><?= anchor('historial', "Historial", array("class"=>"icon graph"));?></li>
+                        <li id="historial"><?= anchor('historial', "Historial", array("class"=>"icon graph"));?></li>
                         <li><?= anchor('departamentos',"Departamentos", array("class"=>"icon pin"));?></li>
                         <li><?= anchor('empleados',"Empleados", array("class"=>"icon user"));?></li>                        
+                        <li><?= anchor('ciudadanos',"Ciudadanos", array("class"=>"icon user"));?></li>                        
                         <li><?= anchor('cerrar', "Salir", array("class"=>"icon close"));?></li>
 
                     <?php endif;?>

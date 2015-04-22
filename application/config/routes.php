@@ -59,7 +59,10 @@ $route['departamento/eliminar/$1'] = "departamento/eliminar/$1";
 $route['mapa'] = "incidente/mapa";
 $route['validar/(:any)'] = "usuario/validar/$1";
 $route['historial'] = "incidente/historial";
+$route['incidente/subirImagen/(:any)'] = "incidente/subirImagen/$1";
+$route['incidente/registrarAjax/(:any)'] = "incidente/registrarAjax/$1";
 $route['incidente'] = "incidente/registrar";
+
 $route['restablecer'] = "usuario/password";
 $route['login'] = "usuario/login";
 $route['registrar'] = "usuario/registrar";

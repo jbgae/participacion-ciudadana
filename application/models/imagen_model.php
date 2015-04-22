@@ -69,6 +69,33 @@ class Imagen_model extends CI_Model{
         return $aux;        
     }
     
+    public function registrarAjax($fecha){
+        $aux = FALSE;
+        $ruta = base_url()."imagenes/";
+        $nombre = $_POST["nombreFoto"];
+        $trozos = explode(".", $nombre);
+        
+        log_message("INFO", "Registrar foto ajax model: $ruta $nombre");
+        
+        $this->nombre = $fecha.$trozos[0];
+        
+        if($trozos[1] != ""){
+            $this->extension = $trozos[1];
+            $this->ruta = $ruta . $this->nombre. ".".$this->extension;
+        }
+        else{
+            $this->ruta = $ruta . $this->nombre;
+        }
+        if($this->db->insert('imagen', $this)){
+            $aux = TRUE;
+            log_message("INFO","Se ha almacenado la imagen en la bd");
+        }
+        else{
+            log_message("INFO","NO se ha almacenado la imagen en la bd");
+        }
+        return $this->codigo();
+    }
+    
     public function datos($codigo){        
         $query = $this->db->get_where('imagen', array('idImagen'=>$codigo));
         $archivo = $query->result();

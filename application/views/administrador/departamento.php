@@ -19,7 +19,7 @@
                         <td><?= $dep->descripcion;?></td>
                         <td class="center"><?= $dep->numEmpleados;?></td>
                         <td class="center">
-                         <a href ="<?= base_url()."/eliminar/departamento/$dep->idDepartamento"?>" class="icon trash open" id="<?= $dep->idDepartamento;?>">Eliminar </a>
+                         <a href ="<?= base_url()."eliminar/departamento/$dep->idDepartamento"?>" class="icon trash open" id="<?= $dep->idDepartamento;?>">Eliminar </a>
                         </td>
                     </tr>
                 <?php endforeach;?>

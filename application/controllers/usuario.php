@@ -20,6 +20,7 @@ class Usuario extends MY_Controller{
     private function _validarSesion(){
         $this->form_validation->set_rules('email', 'Email', 'trim|required|min_length[3]|valid_email|xss_clean|callback_existeUsuario|callback_confirmarPassword|callback_numeroIntentos|callback_usuarioValidado');
         $this->form_validation->set_rules('password', 'Contraseña', 'trim|required|min_length[6]|xss_clean');        
+        
         $this->form_validation->set_message('existeUsuario', 'No existe ning&uacute;n usuario con el email indicado.');
         $this->form_validation->set_message('usuarioValidado', 'El email introducido no esta validado.');
         $this->form_validation->set_message('numeroIntentos', 'La cuenta esta bloqueada temporalmente.');
@@ -37,6 +38,7 @@ class Usuario extends MY_Controller{
         $this->form_validation->set_rules('apellido1', 'Primer Apellido', 'trim|required|min_length[3]|xss_clean');
         $this->form_validation->set_rules('apellido2', 'Segundo Apellido', 'trim|required|min_length[3]|xss_clean');
         $this->form_validation->set_rules('email', 'Email', 'trim|required|min_length[3]|valid_email|xss_clean|is_unique[usuario.email]');
+        $this->form_validation->set_rules('dni','DNI', 'trim|required|exact_length[9]|is_unique[usuario.dni]');
         $this->form_validation->set_rules('direccion', 'Dirección', 'trim|required|min_length[3]|xss_clean');
         $this->form_validation->set_rules('telefono', 'Teléfono', 'trim|required|exact_length[9]|numeric|xss_clean');
         $this->form_validation->set_rules('password', 'Contraseña', 'trim|required|min_length[6]|xss_clean');
@@ -51,6 +53,7 @@ class Usuario extends MY_Controller{
         $this->form_validation->set_message('numeric', '%s debe contener dígitos');
         $this->form_validation->set_message('is_unique', '%s ya esta registrado');
         $this->form_validation->set_message('matches', 'Las contraseñas no coinciden');
+        $this->form_validation->set_message('checkdni', '%s incorrecto');
         
         return $this->form_validation->run();
     }
@@ -64,8 +67,10 @@ class Usuario extends MY_Controller{
             log_message("INFO",$email ."-> EXISTE");
         }
         
+        
         return $aux;
     }
+    
     
     public function usuarioValidado($email){
         log_message("INFO", "/*FUNCION USUARIO VALIDADO*/");
@@ -125,7 +130,18 @@ class Usuario extends MY_Controller{
         return $aux;
     }
     
-    
+    public function checkdni($dni){        
+        log_message("INFO", "== DNI == $dni");
+        $letra = substr($dni, -1);
+        $letra = strtoupper($letra);
+	$numeros = substr($dni, 0, -1);
+	if ( substr("TRWAGMYFPDXBNJZSQVHLCKE", $numeros%23, 1) == $letra && strlen($letra) == 1 && strlen ($numeros) == 8 ){
+            return true;
+	}
+        else{
+            return false;
+	}
+    }
     
     public function login(){              
         $this->pagina = "login";
@@ -201,7 +217,8 @@ class Usuario extends MY_Controller{
                 $error = json_encode(validation_errors());
                 $error = str_replace('"', "", $error);
                 $error = str_replace('<\/span>\n', "", $error);                 
-                $error = str_replace('<\/p>\n', "", $error);                 
+                $error = str_replace('<\/p>\n', "", $error);
+                $error = str_replace('<\/div>\n',"", $error);
                 echo '<div class="text-error">'.$error.'</div>';
             }
             else{
@@ -307,7 +324,10 @@ class Usuario extends MY_Controller{
                 else{
                     echo '<div class="text-error">El proceso de registro no se ha realizado satisfactoriamente, por favor inténtelo de nuevo más tarde </div>';
                 }           
-            }            
+            } 
+            else{
+                echo '<div class="text-error">El proceso de registro no se ha realizado satisfactoriamente. </div>';
+            }
         //}
     }
     
@@ -355,7 +375,7 @@ class Usuario extends MY_Controller{
                 $datos['errorUsuario'] = 'El email introducido no existe';
             }
             else{
-                $cliente = new Usuario_model;
+                $usuario = new Usuario_model;
                 if($usuario->validado($this->input->post('email'))){
                     //Generamos nueva contraseña 
                     $str = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -363,9 +383,9 @@ class Usuario extends MY_Controller{
                     for($i=0;$i<7;$i++) {
                         $cad .= substr($str,rand(0,62),1);
                     }
-                    $pass = array('Pass' => md5($cad));
+                    $pass = array('password' => md5($cad));
 
-                    $cliente->actualizar($this->input->post('email'),$pass);
+                    $usuario->actualizar($this->input->post('email'),$pass);
 
                     //Creamos los datos del email y lo mandamos
                     $datosEmail = array(
@@ -397,4 +417,45 @@ class Usuario extends MY_Controller{
     }
     
     
+    public function datosUsuarioAjax($email){
+        
+        $email = str_replace("%40","@",$email);
+        $email = str_replace("%20",".",$email);
+        
+        $usuario = new Usuario_model;
+        $datos = array();
+        if(Usuario_model::existe($email)){
+            $datos['nombre'] = ucwords($usuario->nombre($email));
+            $datos['apellido1'] = ucwords($usuario->apellido1($email));
+            $datos['apellido2'] = ucwords($usuario->apellido2($email));
+            $datos['email'] = $usuario->email($email);
+            $datos['telefono'] = $usuario->telefono($email);
+            $datos['dni'] = $usuario->dni($email);                        
+        }
+        echo json_encode($datos);
+    }
+    
+    
+    public function ciudadanos(){
+        $this->permisos('administrador');
+        $this->titulo = "Ciudadanos";
+        $this->pagina = "ciudadanos";
+        $this->estilo = array("//cdn.datatables.net/1.10.5/css/jquery.dataTables.min", 
+                              "//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui",
+                              "//cdn.datatables.net/plug-ins/f2c75b7247b/integration/jqueryui/dataTables.jqueryui",
+                              "formulario_modal");
+        $this->javascript = array("//cdn.datatables.net/1.10.5/js/jquery.dataTables.min",
+                                  "datatable",
+                                  "//code.jquery.com/ui/1.11.2/jquery-ui",
+                                  "formulario_modal_empleado",
+                                  "modal");
+        $this->carpeta = "administrador";
+        
+        $ciudadanos = Usuario_model::ciudadanos();        
+        
+        $datos['ciudadanos'] = $ciudadanos;
+        
+        
+        $this->mostrar($datos);
+    }
 }

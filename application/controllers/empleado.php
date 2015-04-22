@@ -113,12 +113,12 @@ class Empleado extends MY_Controller {
     
     /*MIRAR*/
     public function eliminar($email){
+        $email = str_replace("%40",".com",$email);
         if($email != ''){ 
             $email  = urldecode($email); 
             if(Empleado_model::existe($email)){
                 $empleado = new Empleado_model;
-                $empleado->datos($email);                
-                $empleado->eliminar();
+                $empleado->eliminar($email);
             }
         }
         $this->registrar();

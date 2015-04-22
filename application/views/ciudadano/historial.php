@@ -31,6 +31,7 @@
                         </td>
                         <td><?= $incidente->descripcion?></td>
                         <td>
+                            
                             <?php if (file_exists($incidente->rutaImagen)):?>
                                 <img src="<?=$incidente->rutaImagen;?>">
                             <?php else:?>
@@ -44,7 +45,9 @@
                                 <?= anchor("incidente/modificar/".$incidente->Id,"Editar", array("class"=>"icon tools"));?><br>
                             <?php endif;?>    
                             <!-- anchor("#","Eliminar", array("class"=>"icon trash open"));?>-->
-                            <a href ="#" class="icon trash open" id="<?= $incidente->Id;?>">Eliminar </a>
+                            <?php if($this->session->userdata('usuario') == "administrador"):?>
+                                <a href ="#" class="icon trash open" id="<?= $incidente->Id;?>">Eliminar </a>
+                            <?php endif;?>    
                         </td>
                         
                     </tr>

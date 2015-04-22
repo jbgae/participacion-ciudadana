@@ -17,3 +17,8 @@
     <div class="message error"><?= $mensaje;?></div>
 <?php endif; ?>
 
+    
+    <div class="imagenes">
+        <img src="<?=base_url();?>imagenes/use_fse.gif">
+    </div>
+

@@ -1071,9 +1071,9 @@ body {
 #afui form {
   position: relative;
 }
-#afui input[type="radio"],
+#afui input[type="radio"]{display: none;}
 #afui input[type="checkbox"] {
-  display: none;
+  display: inline-block;
 }
 #afui input[type="radio"] + label,
 #afui input[type="checkbox"] + label {

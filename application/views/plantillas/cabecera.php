@@ -22,13 +22,13 @@
         
         <script>
             $.ui.useInternalRouting = false;
-            //$.ui.useOSThemes = true; 
             $.feat.nativeTouchScroll=true;
         </script>
         
         
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
         <script src="<?= base_url();?>js/jquery.js" type="text/javascript"></script>
+        <!--<script src="<?= base_url();?>js/incidenciasNueva.js" type="text/javascript"></script>-->
         <?php if(isset($javascript)):?>
             <?php if(!is_array($javascript) && ($javascript != "")):?>
                 <?php if($javascript[0] === "/"):?>
@@ -89,8 +89,7 @@
                             <h1><?= $titulo;?></h1>
                         <?php else:?>    
                             <h1>Participación ciudadana</h1>
-                        <?php endif;?>    
-                          
+                        <?php endif;?>                     
                     </header>
                     
                     

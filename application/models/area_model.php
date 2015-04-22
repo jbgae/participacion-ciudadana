@@ -17,6 +17,29 @@ class Area_model extends CI_Model{
         self::$db = &get_instance()->db;
     }
     
+    public function areaIncidencia($idIncidencia){
+        $aux = "";
+        $this->db->select('IdArea');
+        $this->db->from('incidencia-area');
+        $this->db->where('IdIncidencia', $idIncidencia);
+        $query = $this->db->get();
+
+        $inc = $query->result();
+
+        //return $inc[0]->IdIncidencia;
+        
+        if($inc[0]->IdArea > 0 && $inc[0]->IdArea < 9){
+            $this->db->select('nombre');
+            $this->db->from('area');
+            $this->db->where('id', $inc[0]->IdArea);
+            $query = $this->db->get();
+
+            $inc = $query->result();
+            $aux = $inc[0]->nombre;
+        }
+        return $aux;
+    }
+    
     static function areas(){
         self::$db->select("id,nombre");
         $query = self::$db->get('area');        

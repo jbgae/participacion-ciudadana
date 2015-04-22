@@ -21,7 +21,8 @@
                         <td class="center"><?= $emp->telefono;?></td>
                         <td> <?= $emp->departamento;?></td>
                         <td class="center">
-                            <a href ="#" class="icon trash open" id="<?= urlencode($emp->email);?>">Eliminar </a>
+                            <?php $aux = str_replace(".com", "%40", $emp->email);?>
+                            <a href ="#" class="icon trash open" id="<?= $aux;?>">Eliminar </a>
                         </td>
                     </tr>
                 <?php endforeach;?>

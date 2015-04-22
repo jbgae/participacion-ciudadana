@@ -34,7 +34,7 @@ class Departamento extends MY_Controller{
                               "//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui",
                               "//cdn.datatables.net/plug-ins/f2c75b7247b/integration/jqueryui/dataTables.jqueryui",
                               "formulario_modal");
-        $this->javascript = array("//cdn.datatables.net/1.10.5/js/jquery.dataTables.min",
+        $this->javascript = array("jquery-ui.min","//cdn.datatables.net/1.10.5/js/jquery.dataTables.min",
                                   "datatable",
                                   "//code.jquery.com/ui/1.11.2/jquery-ui",
                                   "formulario_modal_departamento",
